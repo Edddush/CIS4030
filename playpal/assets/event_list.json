@@ -1,0 +1,46 @@
+
+{
+  "events": [
+    {
+      "name": "Kevin's pickup",
+      "sport": "Football",
+      "location": "Toronto, ON",
+      "date": "March 16, 2024",
+      "time": "10:00",
+      "total_participants": 22,
+      "current_participants": 0,
+      "imageUrl": "https://cdn.pixabay.com/photo/2013/07/13/10/51/football-157930_960_720.png",
+      "description": [ "Bring your own boots", "Free of charge", "Wear shorts red or black shirt"]
+    },
+    {
+      "name": "The ballers meet",
+      "sport": "Basketball",
+      "location": "Guelph, ON",
+      "date": "March 25, 2024",
+      "time": "12:00",
+      "total_participants": 10,
+      "current_participants": 0,
+      "thumbnail": "https://cdn.pixabay.com/photo/2013/07/12/14/07/basketball-147794_960_720.png",
+      "description": [
+        "Enter from the east side of the building",
+        "Bring appropriate basketball shoes",
+        "Free of charge"
+      ]
+    },
+    {
+      "name": "The face off",
+      "sport": "Tennis",
+      "location": "Hamilton, ON",
+      "date": "March 15, 2024",
+      "time": "15:00",
+      "total_participants": 4,
+      "current_participants": 0,
+      "thumbnail": "https://cdn.pixabay.com/photo/2017/01/31/15/31/tennis-2025095_960_720.png",
+      "description": [
+        "Bring a water bottle, it will be hot!",
+        "Tennis balls will be provided at the venue",
+        "Wear all purpose tennis shoes or clay specific ones"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "username": "kevin",
+  "password": "password123",
+  "date_of_birth": "April 16, 2004",
+  "location": "Toronto, ON",
+  "picture": "https://cdn.pixabay.com/photo/2018/08/28/13/29/avatar-3637561_960_720.png",
+  "my_events" : [],
+  "past_events": [],
+  "upcoming_events": []
+}
