@@ -6,25 +6,10 @@ import 'dart:async';
 import 'dart:convert';
 import 'event_details_view.dart';
 
-Future<List<Event>> fetchEventsFromFile() async {
-  // Read the JSON data from the file
-  final String response = await rootBundle.loadString('assets/event_list.json');
-
-  return compute(parseEvents, response);
-}
-
-// A function that converts a response body into a List<Event>.
-List<Event> parseEvents(String responseBody) {
-  final parsed = (jsonDecode(responseBody)["events"] as List).cast<Map<String, dynamic>>();
-
-  return parsed.map<Event>((json) => Event.fromJson(json)).toList();
-}
-
-
 /// Displays a list of SampleItems.
 class EventListView extends StatelessWidget {
   const EventListView({ super.key });
-  static const routeName = '/event_list';
+  static const routeName = '/';
 
   @override
   Widget build(BuildContext context) {

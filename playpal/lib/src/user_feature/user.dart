@@ -1,32 +1,35 @@
 /// A placeholder class that represents an entity or model.
 class Event {
   const Event ({
-    required this.name,
-    required this.sport,
+    required this.username,
+    required this.password,
+    required this.dateOfBirth,
     required this.location,
-    required this.date,
-    required this.time,
-    required this.thumbnail,
-    required this.description,
+    required this.picture,
+    required this.myEvents,
+    required this.pastEvents,
+    required this.upcomingEvents
   });
 
-  final String name;
-  final String sport;
+  final String username;
+  final String password;
+  final String dateOfBirth;
   final String location;
-  final String date;
-  final String time;
-  final String thumbnail;
-  final List description;
+  final String picture;
+  final List myEvents;
+  final List pastEvents;
+  final List upcomingEvents;
 
   factory Event.fromJson(Map<String, dynamic> json) {
     return Event(
-        name: json['name'] as String,
-        sport: json['sport'] as String,
+        username: json['username'] as String,
+        password: json['password'] as String,
+        dateOfBirth: json['date_of_birth'] as String,
         location: json['location'] as String,
-        date: json['date'] as String,
-        time: json['time'] as String,
-        thumbnail: json['imageUrl'] as String,
-        description: json['description'] as List,
+        picture: json['picture'] as String,
+        myEvents: json['my_events'] as List,
+        pastEvents: json['past_events'] as List,
+        upcomingEvents: json['upcoming_events'] as List,
     );
   }
 }

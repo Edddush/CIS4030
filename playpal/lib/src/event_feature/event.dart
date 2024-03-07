@@ -6,8 +6,10 @@ class Event {
     required this.location,
     required this.date,
     required this.time,
+    required this.totalParticipants,
+    required this.currentParticipants,
     required this.thumbnail,
-    required this.description,
+    required this.description
   });
 
   final String name;
@@ -15,6 +17,8 @@ class Event {
   final String location;
   final String date;
   final String time;
+  final int totalParticipants;
+  final int currentParticipants;
   final String thumbnail;
   final List description;
 
@@ -25,7 +29,9 @@ class Event {
         location: json['location'] as String,
         date: json['date'] as String,
         time: json['time'] as String,
-        thumbnail: json['imageUrl'] as String,
+        totalParticipants: json['total_participants'] as int,
+        currentParticipants: json['current_participants'] as int,
+        thumbnail: json['thumbnail'] as String,
         description: json['description'] as List,
     );
   }
