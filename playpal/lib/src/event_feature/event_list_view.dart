@@ -72,12 +72,23 @@ class EventList extends StatelessWidget {
               foregroundImage: NetworkImage(event.thumbnail),
             ),
             onTap: () {
+              print(event.currentParticipants);
               // Navigate to the details page. If the user leaves and returns to
               // the app after it has been killed while running in the
               // background, the navigation stack is restored.
               Navigator.restorablePushNamed(
                 context,
                 EventDetailsView.routeName,
+                arguments: {
+                  'name': event.name,
+                  'date': event.date,
+                  'time': event.time,
+                  'total_participants': event.totalParticipants,
+                  'current_participants': event.currentParticipants,
+                  'thumbnail': event.thumbnail,
+                  'description': event.description.join('\n'),
+                  'location': event.location
+                }
               );
             }
         );
