@@ -7,6 +7,7 @@ import 'event_feature/event_list_view.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
 import 'create_event/create_event.dart';
+import 'user_feature/user_profile.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
@@ -72,6 +73,8 @@ class MyApp extends StatelessWidget {
                     return SettingsView(controller: settingsController);
                   case EventDetailsView.routeName:
                     return const EventDetailsView();
+                  case UserProfile.routeName:
+                    return const UserProfile();
                   case CreateEvent.routeName:
                     return const CreateEvent();
                   case EventListView.routeName:
