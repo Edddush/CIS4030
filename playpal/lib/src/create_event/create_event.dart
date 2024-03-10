@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/services.dart';
-import '../event_feature/event_list_view.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as datatTimePicker;
 
@@ -102,20 +101,6 @@ class CreateEventState extends State<CreateEvent> {
                     ),
                   ),
                 ),
-                // InkWell(
-                //   onTap: () {
-                //     showEndTimePicker(context);
-                //   },
-                //   child: InputDecorator(
-                //     decoration: InputDecoration(
-                //       labelText: 'End Time',
-                //       hintText: 'Select End Time',
-                //     ),
-                //     child: Text(
-                //       '${endTime.format(context)}',
-                //     ),
-                //   ),
-                // ),
                 TextFormField(
                   controller: locationController,
                   decoration: InputDecoration(labelText: 'Location'),
@@ -161,21 +146,21 @@ class CreateEventState extends State<CreateEvent> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (formKey.currentState != null && formKey.currentState!.validate()) {
-                        List<String> descriptionArray = descriptionController.text.split(',').map((e) => e.trim()).toList();
-                        Map<String, dynamic> eventData = {
-                          'name': nameController.text,
-                          'sport': selectedSport,
-                          'location': locationController.text,
-                          'date': selectedDate.toString().substring(0, 10),
-                          'time': startTime.format(context),
-                          'total_participants': 4,
-                          'current_participants': 0,
-                          'thumbnail': "https://cdn.pixabay.com/photo/2017/01/31/15/31/tennis-2025095_960_720.png",
-                          'description': descriptionArray,
-                        };
-                        appendToJson(eventData);
-                        Navigator.pop(context);
-                      }
+                          List<String> descriptionArray = descriptionController.text.split(',').map((e) => e.trim()).toList();
+                          Map<String, dynamic> eventData = {
+                            'name': nameController.text,
+                            'sport': selectedSport,
+                            'location': locationController.text,
+                            'date': selectedDate.toString().substring(0, 10),
+                            'time': startTime.format(context),
+                            'total_participants': 4,
+                            'current_participants': 0,
+                            'thumbnail': "https://cdn.pixabay.com/photo/2017/01/31/15/31/tennis-2025095_960_720.png",
+                            'description': descriptionArray,
+                          };
+                          appendToJson(eventData);
+                          Navigator.pop(context);
+                        }
                       },
                       child: Text('Create Event', 
                         style: TextStyle(fontSize: 20),
@@ -199,7 +184,7 @@ class CreateEventState extends State<CreateEvent> {
 
   Future<void> appendToJson(Map<String, dynamic> newEvent) async {
 
-    File file = File('/Users/arthurkowara/Documents/GitHub/CIS4030/playpal/assets/event_list.json');
+    File file = File('assets/event_list.json');
     String jsonString = await file.readAsString();
     Map<String, dynamic> jsonData = json.decode(jsonString);
     List<dynamic> existingEvents = jsonData['events'];
@@ -233,16 +218,4 @@ class CreateEventState extends State<CreateEvent> {
       });
     }
   }
-
-  // void showEndTimePicker(BuildContext context) async {
-  //   TimeOfDay? selectedTime = await showTimePicker(
-  //     initialTime: startTime,
-  //     context: context,
-  //   );
-  //   if (selectedTime != null) {
-  //     setState(() {
-  //       endTime = selectedTime;
-  //     });
-  //   }
-  // }
 }

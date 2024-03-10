@@ -8,6 +8,8 @@ import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
 import 'create_event/create_event.dart';
 import 'user_feature/user_profile.dart';
+import 'user_feature/user_settings.dart';
+import 'event_feature/login_page.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
@@ -61,7 +63,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(),
           darkTheme: ThemeData.dark(),
           themeMode: settingsController.themeMode,
-
+          home: LoginPage(),
           // Define a function to handle named routes in order to support
           // Flutter web url navigation and deep linking.
           onGenerateRoute: (RouteSettings routeSettings) {
@@ -77,6 +79,8 @@ class MyApp extends StatelessWidget {
                     return const UserProfile();
                   case CreateEvent.routeName:
                     return const CreateEvent();
+                  case UserSettings.routeName:
+                    return const UserSettings();
                   case EventListView.routeName:
                   default:
                     return const EventListView();
