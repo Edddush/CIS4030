@@ -9,7 +9,8 @@ import 'settings/settings_view.dart';
 import 'create_event/create_event.dart';
 import 'user_feature/user_profile.dart';
 import 'event_feature/login_page.dart';
-import 'event_feature/login_page.dart';
+import 'user_feature/user_events/my_events_view.dart';
+
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
@@ -71,14 +72,18 @@ class MyApp extends StatelessWidget {
               settings: routeSettings,
               builder: (BuildContext context) {
                 switch (routeSettings.name) {
-                  case SettingsView.routeName:
-                    return SettingsView(controller: settingsController);
+                  case UserSettings.routeName:
+                    return UserSettings(controller: settingsController);
                   case EventDetailsView.routeName:
                     return const EventDetailsView();
                   case UserProfile.routeName:
                     return const UserProfile();
                   case CreateEvent.routeName:
                     return const CreateEvent();
+                  case LoginPage.routeName:
+                    return const LoginPage();
+                  case MyEventsView.routeName:
+                    return const MyEventsView();
                   case EventListView.routeName:
                   default:
                     return const EventListView();

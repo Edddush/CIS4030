@@ -3,7 +3,7 @@ import 'event_list_view.dart';
 import 'signup_page.dart'; 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
-
+  static const routeName = '/';
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -11,7 +11,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
+  
   void _login() {
     // Placeholder for login logic
     // Here, you should include your authentication logic, for example, checking the username and password against your user.json data or a backend service.
