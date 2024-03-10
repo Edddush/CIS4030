@@ -49,15 +49,15 @@ class UserSettingsState extends State<UserSettings> {
                   },
                 ),
                 TextFormField(
-  controller: nameController,
-  decoration: InputDecoration(
-    labelText: 'User Name',
-    prefixIcon: SizedBox(
-      width: 10,
-      height: 10,
-      child: Icon(Icons.alternate_email, size: 20), 
-    ),
-  ),
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    labelText: 'User Name',
+                    prefixIcon: SizedBox(
+                      width: 10,
+                      height: 10,
+                      child: Icon(Icons.alternate_email, size: 20), 
+                    ),
+                  ),
   validator: (value) {
     if (value == null || value.isEmpty) {
       return 'Please enter your user name';
