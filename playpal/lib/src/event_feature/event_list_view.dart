@@ -7,6 +7,8 @@ import 'dart:convert';
 import 'event_details_view.dart';
 import '../create_event/create_event.dart';
 import '../user_feature/user_profile.dart';
+import 'package:playpal/src/event_feature/hamburger_menu.dart';
+import 'package:playpal/src/create_event/create_event_button.dart';
 
 Future<List<Event>> fetchEventsFromFile() async {
   // Read the JSON data from the file
@@ -26,14 +28,24 @@ List<Event> parseEvents(String responseBody) {
 /// Displays a list of SampleItems.
 class EventListView extends StatelessWidget {
   const EventListView({ super.key });
-  static const routeName = '/';
+  static const routeName = '/events';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        drawer: const NavBar(),
         appBar: AppBar(
+          
           title: const Text('Events', style: TextStyle(color: Colors.white)),
           backgroundColor: Colors.cyan[900],
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.add, color:Colors.white, size: 40),
+              onPressed: () {
+
+              },
+            ),
+          ],
         ),
         body: FutureBuilder<List<Event>>(
             future: fetchEventsFromFile(),

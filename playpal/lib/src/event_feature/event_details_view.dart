@@ -12,6 +12,8 @@ class EventDetailsView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(event['name']),
+        backgroundColor: Colors.cyan[900],
+        foregroundColor: Colors.white,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

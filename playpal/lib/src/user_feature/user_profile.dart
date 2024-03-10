@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:playpal/src/user_feature/user_events/my_events_view.dart';
 
 class UserProfile extends StatefulWidget {
   @override
@@ -32,7 +33,10 @@ class UserProfileState extends State<UserProfile> {
                 child: Center( 
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.pop(context);
+                      Navigator.restorablePushNamed(
+                        context,
+                        MyEventsView.routeName,
+                      );
                     },
                     child: Text('My Events', 
                       style: TextStyle(fontSize: 20),
