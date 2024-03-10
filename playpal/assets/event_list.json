@@ -1,4 +1,3 @@
-
 {
   "events": [
     {
@@ -10,7 +9,11 @@
       "total_participants": 22,
       "current_participants": 0,
       "thumbnail": "https://cdn.pixabay.com/photo/2013/07/13/10/51/football-157930_960_720.png",
-      "description": [ "Bring your own boots", "Free of charge", "Wear shorts red or black shirt"]
+      "description": [
+        "Bring your own boots",
+        "Free of charge",
+        "Wear shorts red or black shirt"
+      ]
     },
     {
       "name": "The ballers meet",
@@ -40,6 +43,53 @@
         "Bring a water bottle, it will be hot!",
         "Tennis balls will be provided at the venue",
         "Wear all purpose tennis shoes or clay specific ones"
+      ]
+    },
+    {
+      "name": "Name",
+      "sport": "Tennis",
+      "location": "Toronto",
+      "date": "2024-03-08",
+      "time": "1:12 PM",
+      "total_participants": 4,
+      "current_participants": 0,
+      "thumbnail": "https://cdn.pixabay.com/photo/2017/01/31/15/31/tennis-2025095_960_720.png",
+      "description": [
+        "This",
+        "is",
+        "an",
+        "example"
+      ]
+    },
+    {
+      "name": "ExampleCreate",
+      "sport": "Tennis",
+      "location": "Toronto",
+      "date": "2024-03-08",
+      "time": "1:18 PM",
+      "total_participants": 4,
+      "current_participants": 0,
+      "thumbnail": "https://cdn.pixabay.com/photo/2017/01/31/15/31/tennis-2025095_960_720.png",
+      "description": [
+        "This",
+        "is an",
+        "example"
+      ]
+    },
+    {
+      "name": "Create event 2",
+      "sport": "Basketball",
+      "location": "Toronto",
+      "date": "2024-03-08",
+      "time": "1:23 PM",
+      "total_participants": 4,
+      "current_participants": 0,
+      "thumbnail": "https://cdn.pixabay.com/photo/2017/01/31/15/31/tennis-2025095_960_720.png",
+      "description": [
+        "This",
+        "is a",
+        "n",
+        "example"
       ]
     }
   ]

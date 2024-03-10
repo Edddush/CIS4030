@@ -6,6 +6,8 @@ import 'event_feature/event_details_view.dart';
 import 'event_feature/event_list_view.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
+import 'create_event/create_event.dart';
+import 'user_feature/user_profile.dart';
 import 'event_feature/login_page.dart';
 import 'event_feature/login_page.dart';
 
@@ -73,9 +75,14 @@ class MyApp extends StatelessWidget {
                     return SettingsView(controller: settingsController);
                   case EventDetailsView.routeName:
                     return const EventDetailsView();
+                  case UserProfile.routeName:
+                    return const UserProfile();
+                  case CreateEvent.routeName:
+                    return const CreateEvent();
                   case EventListView.routeName:
                   default:
                     return const EventListView();
+                  
                 }
               },
             );

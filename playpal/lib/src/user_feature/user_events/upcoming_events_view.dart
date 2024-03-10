@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:playpal/providers/my_events_provider.dart';
 import 'package:playpal/src/event_feature/event.dart';
 import 'package:playpal/src/event_feature/event_details_view.dart';
+import 'package:playpal/src/create_event/create_event.dart';
 import 'package:provider/provider.dart';
 
 class MyEventsView extends StatelessWidget {

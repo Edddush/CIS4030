@@ -5,6 +5,8 @@ import 'event.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'event_details_view.dart';
+import '../create_event/create_event.dart';
+import '../user_feature/user_profile.dart';
 
 Future<List<Event>> fetchEventsFromFile() async {
   // Read the JSON data from the file
@@ -81,6 +83,16 @@ class EventList extends StatelessWidget {
               Navigator.restorablePushNamed(
                 context,
                 EventDetailsView.routeName,
+                arguments: {
+                  'name': event.name,
+                  'date': event.date,
+                  'time': event.time,
+                  'total_participants': event.totalParticipants,
+                  'current_participants': event.currentParticipants,
+                  'thumbnail': event.thumbnail,
+                  'description': event.description.join('\n'),
+                  'location': event.location
+                }
               );
             },
           ),
