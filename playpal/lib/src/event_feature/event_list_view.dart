@@ -56,28 +56,30 @@ class EventList extends StatelessWidget {
 
   final List<Event> events;
 
-  @override
-  Widget build (BuildContext context){
+ Widget build(BuildContext context) {
     return ListView.builder(
-      // Providing a restorationId allows the ListView to restore the
-      // scroll position when a user leaves and returns to the app after it
-      // has been killed while running in the background.
       restorationId: 'EventListView',
       itemCount: events.length,
       itemBuilder: (context, index) {
         final event = events[index];
-        return ListTile(
+        return Card( // Wrap each ListTile with a Card for better UI
+          elevation: 4.0, // Optional: adds a shadow to each card
+          margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0), // Optional: adds margin around each card
+          child: ListTile(
             title: Text(event.name),
-            subtitle: Text(event.sport),
+            subtitle: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(event.sport),
+                Text('Location: ${event.location}'),
+                Text('Date: ${event.date}, Time: ${event.time}'),
+                Text('Participants: ${event.currentParticipants}/${event.totalParticipants}'),
+              ],
+            ),
             leading: CircleAvatar(
-              // Display the Flutter Logo image asset.
               foregroundImage: NetworkImage(event.thumbnail),
             ),
             onTap: () {
-              print(event.currentParticipants);
-              // Navigate to the details page. If the user leaves and returns to
-              // the app after it has been killed while running in the
-              // background, the navigation stack is restored.
               Navigator.restorablePushNamed(
                 context,
                 EventDetailsView.routeName,
@@ -92,7 +94,8 @@ class EventList extends StatelessWidget {
                   'location': event.location
                 }
               );
-            }
+            },
+          ),
         );
       },
     );
