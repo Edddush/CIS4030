@@ -4,8 +4,8 @@
       "name": "Kevin's pickup",
       "sport": "Football",
       "location": "Toronto, ON",
-      "date": "March 16, 2024",
-      "time": "10:00",
+      "date": "2024-03-16",
+      "time": "10:00 AM",
       "total_participants": 22,
       "current_participants": 0,
       "thumbnail": "https://cdn.pixabay.com/photo/2013/07/13/10/51/football-157930_960_720.png",
@@ -13,14 +13,15 @@
         "Bring your own boots",
         "Free of charge",
         "Wear shorts red or black shirt"
-      ]
+      ],
+      "is_past": false
     },
     {
       "name": "The ballers meet",
       "sport": "Basketball",
       "location": "Guelph, ON",
-      "date": "March 25, 2024",
-      "time": "12:00",
+      "date": "2024-03-25",
+      "time": "12:00 PM",
       "total_participants": 10,
       "current_participants": 0,
       "thumbnail": "https://cdn.pixabay.com/photo/2013/07/12/14/07/basketball-147794_960_720.png",
@@ -28,14 +29,15 @@
         "Enter from the east side of the building",
         "Bring appropriate basketball shoes",
         "Free of charge"
-      ]
+      ],
+      "is_past": false
     },
     {
       "name": "The face off",
       "sport": "Tennis",
       "location": "Hamilton, ON",
-      "date": "March 15, 2024",
-      "time": "15:00",
+      "date": "2024-03-11",
+      "time": "2:28 AM",
       "total_participants": 4,
       "current_participants": 0,
       "thumbnail": "https://cdn.pixabay.com/photo/2017/01/31/15/31/tennis-2025095_960_720.png",
@@ -43,12 +45,13 @@
         "Bring a water bottle, it will be hot!",
         "Tennis balls will be provided at the venue",
         "Wear all purpose tennis shoes or clay specific ones"
-      ]
+      ],
+      "is_past": false
     },
     {
       "name": "Name",
       "sport": "Tennis",
-      "location": "Toronto",
+      "location": "Toronto, ON",
       "date": "2024-03-08",
       "time": "1:12 PM",
       "total_participants": 4,
@@ -59,12 +62,13 @@
         "is",
         "an",
         "example"
-      ]
+      ],
+      "is_past": false
     },
     {
       "name": "ExampleCreate",
       "sport": "Tennis",
-      "location": "Toronto",
+      "location": "Toronto, ON",
       "date": "2024-03-08",
       "time": "1:18 PM",
       "total_participants": 4,
@@ -74,23 +78,25 @@
         "This",
         "is an",
         "example"
-      ]
+      ],
+      "is_past": false
     },
     {
       "name": "Create event 2",
       "sport": "Basketball",
-      "location": "Toronto",
+      "location": "Toronto, ON",
       "date": "2024-03-08",
       "time": "1:23 PM",
-      "total_participants": 4,
+      "total_participants": 10,
       "current_participants": 0,
-      "thumbnail": "https://cdn.pixabay.com/photo/2017/01/31/15/31/tennis-2025095_960_720.png",
+      "thumbnail": "https://cdn.pixabay.com/photo/2013/07/12/14/07/basketball-147794_960_720.png",
       "description": [
         "This",
         "is a",
         "n",
         "example"
-      ]
+      ],
+      "is_past": false
     }
   ]
 }
