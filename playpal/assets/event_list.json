@@ -8,7 +8,7 @@
       "time": "10:00",
       "total_participants": 22,
       "current_participants": 0,
-      "thumbnail": "https://cdn.pixabay.com/photo/2013/07/13/10/51/football-157930_960_720.png",
+      "thumbnail": "https://pixabay.com/get/gfa800b58c884f9746b7833bc48741ad80321a50eb469991570ac0552a14fb7cc4746eb463e420f30591d1ef89504df942cb4a86f604eaff1127bb0ee3d3998f1_1280.png",
       "description": [
         "Bring your own boots",
         "Free of charge",
@@ -90,6 +90,34 @@
         "is a",
         "n",
         "example"
+      ]
+    },
+    {
+      "name": "Basketball 7",
+      "sport": "Basketball",
+      "location": "Guelph",
+      "date": "2024-03-11",
+      "time": "11:57 PM",
+      "total_participants": 4,
+      "current_participants": 0,
+      "thumbnail": "https://cdn.pixabay.com/photo/2013/07/12/14/07/basketball-147794_960_720.png",
+      "description": [
+        "This",
+        "description"
+      ]
+    },
+    {
+      "name": "pickelball",
+      "sport": "Pickleball",
+      "location": "Guelph",
+      "date": "2024-03-10",
+      "time": "11:59 PM",
+      "total_participants": 2,
+      "current_participants": 0,
+      "thumbnail": "",
+      "description": [
+        "This",
+        "desciption"
       ]
     }
   ]

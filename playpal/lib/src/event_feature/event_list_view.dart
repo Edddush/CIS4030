@@ -42,7 +42,10 @@ class EventListView extends StatelessWidget {
             IconButton(
               icon: Icon(Icons.add, color:Colors.white, size: 40),
               onPressed: () {
-
+                Navigator.restorablePushNamed(
+                  context,
+                  CreateEvent.routeName,
+                );
               },
             ),
           ],
