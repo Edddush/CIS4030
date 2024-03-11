@@ -1,4 +1,7 @@
+import 'event.dart';
 import 'package:flutter/material.dart';
+import 'package:playpal/providers/upcoming_events_provider.dart';
+import 'package:provider/provider.dart';
 
 class EventDetailsView extends StatelessWidget {
   const EventDetailsView({super.key});
@@ -7,27 +10,23 @@ class EventDetailsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Map event = ModalRoute.of(context)!.settings.arguments as Map;
+    final Map<String, dynamic> argument =
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    final Event eventArgument = Event.fromJson(argument);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(event['name']),
-        backgroundColor: Colors.cyan[900],
+        title: Text(eventArgument.name),
+        backgroundColor: Colors.black54,
         foregroundColor: Colors.white,
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FixedImage(thumbnail: event['thumbnail']),
+          FixedImage(thumbnail: eventArgument.thumbnail),
           Expanded(
             child: SingleChildScrollView(
-              child: Details(
-                  description: event['description'],
-                  date: event['date'],
-                  time: event['time'],
-                  totalParticipants: event['total_participants'],
-                  currentParticipants: event['current_participants'],
-                  location: event['location']),
+              child: Details(event: eventArgument),
             ),
           ),
         ],
@@ -40,6 +39,7 @@ class FixedImage extends StatelessWidget {
   const FixedImage({super.key, required this.thumbnail});
 
   final String thumbnail;
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -61,23 +61,15 @@ class FixedImage extends StatelessWidget {
 class Details extends StatelessWidget {
   const Details({
     super.key,
-    required this.description,
-    required this.date,
-    required this.time,
-    required this.totalParticipants,
-    required this.currentParticipants,
-    required this.location
+    required this.event,
   });
 
-  final String description;
-  final String date;
-  final String time;
-  final int totalParticipants;
-  final int currentParticipants;
-  final String location;
+  final Event event;
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<UpcomingEventsProvider>(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -91,38 +83,85 @@ class Details extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            description,
+            event.description.join('\n'),
             style: const TextStyle(fontSize: 18),
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            date,
+            event.date,
             style: const TextStyle(fontSize: 18),
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            time,
+            event.time,
             style: const TextStyle(fontSize: 18),
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            '$currentParticipants/$totalParticipants',
+            '${event.currentParticipants}/${event.totalParticipants}',
             style: const TextStyle(fontSize: 18),
           ),
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
           child: Text(
-            location,
+            event.location,
             style: const TextStyle(fontSize: 18),
           ),
         ),
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: provider.isUpcomingEvent(event)
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                      ElevatedButton(
+                          onPressed: null,
+                          style: ElevatedButton.styleFrom(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 20,
+                                  horizontal: 40), // Increase button height
+                              textStyle: const TextStyle(fontSize: 26),
+                              backgroundColor: Colors.grey,
+                              foregroundColor:
+                                  Colors.white24 // Increase font size
+                              ),
+                          child: const Text('Join')),
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.redAccent[100],
+                            foregroundColor: Colors.black,
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 20,
+                                horizontal: 40), // Increase button height
+                            textStyle: const TextStyle(fontSize: 26),
+                          ),
+                          onPressed: () {
+                            event.removeParticipant();
+                            provider.removeFromList(event);
+                          },
+                          child: const Text('Leave'))
+                    ])
+              : ElevatedButton(
+                  onPressed: () {
+                    event.addParticipant();
+                    provider.addToList(event);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 20, horizontal: 40), // Increase button height
+                    textStyle: const TextStyle(fontSize: 26),
+                    backgroundColor: Colors.cyan[900],
+                    foregroundColor: Colors.white, // Increase font size
+                  ),
+                  child: const Text('Join')),
+        )
       ],
     );
   }
