@@ -23,7 +23,7 @@ class CreateEventState extends State<CreateEvent> {
   String selectedSport = "Basketball";
   DateTime? selectedDate = DateTime.now();
   TimeOfDay startTime = TimeOfDay.now();
-  int? maxNumParticipants;
+  int maxNumParticipants = 0;
   TextEditingController locationController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   List<String> sports = ['Basketball', 'Hockey', 'Pickleball', 'Soccer', 'Squash', 'Tennis', "Volleyball"];
@@ -124,7 +124,7 @@ class CreateEventState extends State<CreateEvent> {
                   keyboardType: TextInputType.number,
                   onChanged: (value) {
                     setState(() {
-                      maxNumParticipants = int.tryParse(value);
+                      maxNumParticipants = int.parse(value);
                     });
                   },
                 ),
@@ -165,13 +165,6 @@ class CreateEventState extends State<CreateEvent> {
                           }else if (selectedSport == "PickelBall"){
                             thumbnail = "https://pixabay.com/get/g6e58591ab62e3a1dd8bae7037148c02d10b6bf76c53cf43bbd0f5faca0fcc837590590599270942f64d4caa8bd3f2242de27947fc5f6d3b3330d6afe0a5628d1_1280.png";
                           }
-                        if (formKey.currentState != null &&
-                            formKey.currentState!.validate()) {
-                          List<String> descriptionArray = descriptionController
-                              .text
-                              .split(',')
-                              .map((e) => e.trim())
-                              .toList();
                           Map<String, dynamic> eventData = {
                             'name': nameController.text,
                             'sport': selectedSport,
@@ -182,21 +175,23 @@ class CreateEventState extends State<CreateEvent> {
                             'current_participants': 0,
                             'thumbnail': thumbnail,
                             'description': descriptionArray,
+                            "isPast": false
                           };
                           event = Event(
                             name: nameController.text,
                             sport: selectedSport,
-                            location: "National Stadium",
+                            location: locationController.text,
                             date: selectedDate.toString().substring(0, 10),
                             time: startTime.format(context),
-                            totalParticipants: 22,
-                            currentParticipants: 20,
-                            thumbnail: "https://cdn.pixabay.com/photo/2017/01/31/15/31/tennis-2025095_960_720.png",
+                            totalParticipants: maxNumParticipants,
+                            currentParticipants: 0,
+                            thumbnail: thumbnail,
                             description: descriptionArray,
+                            isPast: false,
                           );
                           appendToJson(eventData);
                           Navigator.pop(context);
-                          provider.addtoList(event);
+                          provider.addToList(event);
                         }
                       },
                       style: ElevatedButton.styleFrom(
