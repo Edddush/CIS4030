@@ -42,7 +42,9 @@ class _UserSettingsState extends State<UserSettings> {
   String userJson = await getUserJSON();
   Map<String, dynamic> jsonData = json.decode(userJson);
   jsonData['username'] = usernameController.text;
-  jsonData['password'] = newPasswordController.text;
+  if (newPasswordController.text != "") {
+    jsonData['password'] = newPasswordController.text;
+  }
   jsonData['date_of_birth'] = dob.toString();
   jsonData['location'] = locationController.text;
   String updatedJsonString = JsonEncoder.withIndent('  ').convert(jsonData);
@@ -119,12 +121,6 @@ void initState() {
                 TextFormField(
                   controller: newPasswordController,
                   decoration: const InputDecoration(labelText: 'New Password'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your new password';
-                    }
-                    return null;
-                  },
                   obscureText: true,
                 ),
                 InkWell(
