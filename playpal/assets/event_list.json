@@ -112,6 +112,21 @@
         "description"
       ],
       "is_past": false
+    },
+    {
+      "name": "Event Name",
+      "sport": "Basketball",
+      "location": "Toronto",
+      "date": "2024-03-12",
+      "time": "5:40 PM",
+      "total_participants": 6,
+      "current_participants": 0,
+      "thumbnail": "https://cdn.pixabay.com/photo/2013/07/12/14/07/basketball-147794_960_720.png",
+      "description": [
+        "This",
+        "eample"
+      ],
+      "is_past": false
     }
   ]
 }

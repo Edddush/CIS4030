@@ -175,7 +175,7 @@ class CreateEventState extends State<CreateEvent> {
                             'current_participants': 0,
                             'thumbnail': thumbnail,
                             'description': descriptionArray,
-                            "isPast": false
+                            "is_past": false
                           };
                           event = Event(
                             name: nameController.text,
