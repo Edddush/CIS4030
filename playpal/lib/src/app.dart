@@ -1,3 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
+import 'event_feature/event_details_view.dart';
+import 'event_feature/event_list_view.dart';
+import 'settings/settings_controller.dart';
 import '../providers/my_events_provider.dart';
 import 'settings/settings_view.dart';
 import 'package:flutter/material.dart';
@@ -9,12 +16,14 @@ import 'settings/settings_controller.dart';
 import 'event_feature/event_list_view.dart';
 import 'event_feature/event_details_view.dart';
 import 'user_feature/user_events/my_events_view.dart';
+import 'package:playpal/providers/my_events_provider.dart';
 import 'user_feature/user_events/past_events_view.dart';
 import 'user_feature/user_events/upcoming_events_view.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:playpal/providers/past_events_provider.dart';
 import 'package:playpal/providers/upcoming_events_provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
@@ -35,14 +44,13 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider<MyEventsProvider>(
               create: (context) => MyEventsProvider()),
+        ],
+        child: MaterialApp(
           ChangeNotifierProvider<PastEventsProvider>(
               create: (context) => PastEventsProvider()),
           ChangeNotifierProvider<UpcomingEventsProvider>(
               create: (context) => UpcomingEventsProvider())
         ],
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-
           // Providing a restorationScopeId allows the Navigator built by the
           // MaterialApp to restore the navigation stack when a user leaves and
           // returns to the app after it has been killed while running in the
