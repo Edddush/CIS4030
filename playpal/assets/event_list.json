@@ -97,6 +97,21 @@
         "example"
       ],
       "is_past": false
+    },
+    {
+      "name": "Basketball 7",
+      "sport": "Basketball",
+      "location": "Guelph",
+      "date": "2024-03-11",
+      "time": "11:57 PM",
+      "total_participants": 4,
+      "current_participants": 0,
+      "thumbnail": "https://cdn.pixabay.com/photo/2013/07/12/14/07/basketball-147794_960_720.png",
+      "description": [
+        "This",
+        "description"
+      ],
+      "is_past": false
     }
   ]
 }

@@ -6,6 +6,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'event_details_view.dart';
 import 'package:playpal/src/event_feature/hamburger_menu.dart';
+import 'package:playpal/src/create_event/create_event.dart';
 
 Future<List<Event>> fetchEventsFromFile() async {
   // Read the JSON data from the file
@@ -35,8 +36,13 @@ class EventListView extends StatelessWidget {
           foregroundColor: Colors.white,
           actions: <Widget>[
             IconButton(
-              icon: const Icon(Icons.add, size: 32),
-              onPressed: () {},
+              icon: Icon(Icons.add, color:Colors.white, size: 40),
+              onPressed: () {
+                Navigator.restorablePushNamed(
+                  context,
+                  CreateEvent.routeName,
+                );
+              },
             ),
           ],
         ),
