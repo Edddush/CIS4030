@@ -10,11 +10,11 @@ import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as datatTimePicker;
 
 class CreateEvent extends StatefulWidget {
-  @override
   const CreateEvent({super.key});
   static const routeName = '/create_event';
-  CreateEventState createState() => CreateEventState();
 
+  @override
+  CreateEventState createState() => CreateEventState();
 }
 
 class CreateEventState extends State<CreateEvent> {
@@ -23,7 +23,6 @@ class CreateEventState extends State<CreateEvent> {
   String selectedSport = "Basketball";
   DateTime? selectedDate = DateTime.now();
   TimeOfDay startTime = TimeOfDay.now();
-  // TimeOfDay endTime = TimeOfDay.now();
   int? maxNumParticipants;
   TextEditingController locationController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -35,13 +34,13 @@ class CreateEventState extends State<CreateEvent> {
     final provider = Provider.of<MyEventsProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Create Event'),
+        title: const Text('Create Event'),
         backgroundColor: Colors.cyan[900],
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
-        child:Padding(
-          padding: EdgeInsets.all(16.0),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
           child: Form(
             key: formKey,
             child: Column(
@@ -49,7 +48,7 @@ class CreateEventState extends State<CreateEvent> {
               children: <Widget>[
                 TextFormField(
                   controller: nameController,
-                  decoration: InputDecoration(labelText: 'Name'),
+                  decoration: const InputDecoration(labelText: 'Name'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your name';
@@ -58,7 +57,7 @@ class CreateEventState extends State<CreateEvent> {
                   },
                 ),
                 DropdownButtonFormField(
-                  decoration: InputDecoration(labelText: 'Sport'),
+                  decoration: const InputDecoration(labelText: 'Sport'),
                   value: selectedSport,
                   onChanged: (value) {
                     setState(() {
@@ -83,12 +82,12 @@ class CreateEventState extends State<CreateEvent> {
                     showDatePicker(context);
                   },
                   child: InputDecorator(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Date',
                       hintText: 'Select Date',
                     ),
                     child: Text(
-                      '${selectedDate.toString().substring(0, 10)}',
+                      selectedDate.toString().substring(0, 10),
                     ),
                   ),
                 ),
@@ -97,32 +96,16 @@ class CreateEventState extends State<CreateEvent> {
                     showStartTimePicker(context);
                   },
                   child: InputDecorator(
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       labelText: 'Start Time',
                       hintText: 'Select Start Time',
                     ),
-                    child: Text(
-                      '${startTime.format(context)}',
-                    ),
+                    child: Text(startTime.format(context)),
                   ),
                 ),
-                // InkWell(
-                //   onTap: () {
-                //     showEndTimePicker(context);
-                //   },
-                //   child: InputDecorator(
-                //     decoration: InputDecoration(
-                //       labelText: 'End Time',
-                //       hintText: 'Select End Time',
-                //     ),
-                //     child: Text(
-                //       '${endTime.format(context)}',
-                //     ),
-                //   ),
-                // ),
                 TextFormField(
                   controller: locationController,
-                  decoration: InputDecoration(labelText: 'Location'),
+                  decoration: const InputDecoration(labelText: 'Location'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter the location';
@@ -132,7 +115,7 @@ class CreateEventState extends State<CreateEvent> {
                 ),
                 TextField(
                   controller: numberController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Number of participants',
                   ),
                   inputFormatters: [
@@ -147,7 +130,7 @@ class CreateEventState extends State<CreateEvent> {
                 ),
                 TextFormField(
                   controller: descriptionController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Description',
                   ),
                   minLines: 1,
@@ -158,7 +141,6 @@ class CreateEventState extends State<CreateEvent> {
                     return null;
                   },
                 ),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 32.0),
                   child: Center(
@@ -183,6 +165,13 @@ class CreateEventState extends State<CreateEvent> {
                           }else if (selectedSport == "PickelBall"){
                             thumbnail = "https://pixabay.com/get/g6e58591ab62e3a1dd8bae7037148c02d10b6bf76c53cf43bbd0f5faca0fcc837590590599270942f64d4caa8bd3f2242de27947fc5f6d3b3330d6afe0a5628d1_1280.png";
                           }
+                        if (formKey.currentState != null &&
+                            formKey.currentState!.validate()) {
+                          List<String> descriptionArray = descriptionController
+                              .text
+                              .split(',')
+                              .map((e) => e.trim())
+                              .toList();
                           Map<String, dynamic> eventData = {
                             'name': nameController.text,
                             'sport': selectedSport,
@@ -210,14 +199,15 @@ class CreateEventState extends State<CreateEvent> {
                           provider.addtoList(event);
                         }
                       },
-                      child: Text('Create Event', 
-                        style: TextStyle(fontSize: 20),
-                      ),
                       style: ElevatedButton.styleFrom(
                         minimumSize: Size(200, 50),
-                        padding: EdgeInsets.symmetric(horizontal: 32.0), 
+                        padding: EdgeInsets.symmetric(horizontal: 32.0),
                         backgroundColor: Colors.cyan[900],
                         foregroundColor: Colors.white,
+                      ),
+                      child: const Text(
+                        'Create Event',
+                        style: TextStyle(fontSize: 20),
                       ),
                     ),
                   ),
@@ -231,14 +221,15 @@ class CreateEventState extends State<CreateEvent> {
   }
 
   Future<void> appendToJson(Map<String, dynamic> newEvent) async {
-
-    File file = File('/Users/arthurkowara/Documents/GitHub/CIS4030/playpal/assets/event_list.json');
+    File file = File(
+        '/Users/arthurkowara/Documents/GitHub/CIS4030/playpal/assets/event_list.json');
     String jsonString = await file.readAsString();
     Map<String, dynamic> jsonData = json.decode(jsonString);
     List<dynamic> existingEvents = jsonData['events'];
     existingEvents.add(newEvent);
-    await file.writeAsString(JsonEncoder.withIndent('  ').convert(jsonData));
- }
+    await file
+        .writeAsString(const JsonEncoder.withIndent('  ').convert(jsonData));
+  }
 
   void showDatePicker(BuildContext context) {
     datatTimePicker.DatePicker.showDatePicker(
@@ -266,16 +257,4 @@ class CreateEventState extends State<CreateEvent> {
       });
     }
   }
-
-  // void showEndTimePicker(BuildContext context) async {
-  //   TimeOfDay? selectedTime = await showTimePicker(
-  //     initialTime: startTime,
-  //     context: context,
-  //   );
-  //   if (selectedTime != null) {
-  //     setState(() {
-  //       endTime = selectedTime;
-  //     });
-  //   }
-  // }
 }

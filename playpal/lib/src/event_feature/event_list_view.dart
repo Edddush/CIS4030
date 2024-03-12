@@ -5,29 +5,24 @@ import 'event.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'event_details_view.dart';
-import '../create_event/create_event.dart';
-import '../user_feature/user_profile.dart';
 import 'package:playpal/src/event_feature/hamburger_menu.dart';
-import 'package:playpal/src/create_event/create_event_button.dart';
 
 Future<List<Event>> fetchEventsFromFile() async {
   // Read the JSON data from the file
   final String response = await rootBundle.loadString('assets/event_list.json');
-
   return compute(parseEvents, response);
 }
 
 // A function that converts a response body into a List<Event>.
 List<Event> parseEvents(String responseBody) {
-  final parsed = (jsonDecode(responseBody)["events"] as List).cast<Map<String, dynamic>>();
-
+  final parsed =
+      (jsonDecode(responseBody)["events"] as List).cast<Map<String, dynamic>>();
   return parsed.map<Event>((json) => Event.fromJson(json)).toList();
 }
 
-
 /// Displays a list of SampleItems.
 class EventListView extends StatelessWidget {
-  const EventListView({ super.key });
+  const EventListView({super.key});
   static const routeName = '/events';
 
   @override
@@ -35,9 +30,9 @@ class EventListView extends StatelessWidget {
     return Scaffold(
         drawer: const NavBar(),
         appBar: AppBar(
-          
-          title: const Text('Events', style: TextStyle(color: Colors.white)),
-          backgroundColor: Colors.cyan[900],
+          title: const Text('Events'),
+          backgroundColor: Colors.black54,
+          foregroundColor: Colors.white,
           actions: <Widget>[
             IconButton(
               icon: Icon(Icons.add, color:Colors.white, size: 40),
@@ -47,22 +42,23 @@ class EventListView extends StatelessWidget {
                   CreateEvent.routeName,
                 );
               },
+              icon: const Icon(Icons.add, size: 32),
+              onPressed: () {},
             ),
           ],
         ),
         body: FutureBuilder<List<Event>>(
             future: fetchEventsFromFile(),
-            builder: (context, snapshot){
-              if(snapshot.hasError){
-                return const Center(child: Text('An error occurred!'),);
+            builder: (context, snapshot) {
+              if (snapshot.hasError) {
+                print(snapshot);
+                return const Center(child: Text('An error occurred!'));
               } else if (snapshot.hasData) {
                 return EventList(events: snapshot.data!);
               } else {
                 return const Center(child: CircularProgressIndicator());
               }
-            }
-        )
-    );
+            }));
   }
 }
 
@@ -71,15 +67,19 @@ class EventList extends StatelessWidget {
 
   final List<Event> events;
 
- Widget build(BuildContext context) {
+  @override
+  Widget build(BuildContext context) {
     return ListView.builder(
       restorationId: 'EventListView',
       itemCount: events.length,
       itemBuilder: (context, index) {
         final event = events[index];
-        return Card( // Wrap each ListTile with a Card for better UI
+        return Card(
+          // Wrap each ListTile with a Card for better UI
           elevation: 4.0, // Optional: adds a shadow to each card
-          margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0), // Optional: adds margin around each card
+          margin: const EdgeInsets.symmetric(
+              horizontal: 8.0,
+              vertical: 4.0), // Optional: adds margin around each card
           child: ListTile(
             title: Text(event.name),
             subtitle: Column(
@@ -88,26 +88,16 @@ class EventList extends StatelessWidget {
                 Text(event.sport),
                 Text('Location: ${event.location}'),
                 Text('Date: ${event.date}, Time: ${event.time}'),
-                Text('Participants: ${event.currentParticipants}/${event.totalParticipants}'),
+                Text(
+                    'Participants: ${event.currentParticipants}/${event.totalParticipants}'),
               ],
             ),
             leading: CircleAvatar(
               foregroundImage: NetworkImage(event.thumbnail),
             ),
             onTap: () {
-              Navigator.restorablePushNamed(
-                context,
-                EventDetailsView.routeName,
-                arguments: {
-                  'name': event.name,
-                  'date': event.date,
-                  'time': event.time,
-                  'total_participants': event.totalParticipants,
-                  'current_participants': event.currentParticipants,
-                  'thumbnail': event.thumbnail,
-                  'description': event.description.join('\n'),
-                  'location': event.location
-                }
+              Navigator.restorablePushNamed(context, EventDetailsView.routeName,
+                  arguments: event.toMap()
               );
             },
           ),
