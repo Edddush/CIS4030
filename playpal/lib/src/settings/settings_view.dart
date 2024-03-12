@@ -1,52 +1,76 @@
-import 'package:flutter/material.dart';
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:playpal/src/settings/settings_controller.dart';
-// import 'package:flutter/services.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
-    as date_time_picker;
+    as datatTimePicker;
+
 
 class UserSettings extends StatefulWidget {
-  const UserSettings({super.key, required this.controller});
-  final SettingsController controller;
   static const routeName = '/user_settings';
+  const UserSettings({Key? key}) : super(key: key);
 
   @override
-  UserSettingsState createState() => UserSettingsState();
+  _UserSettingsState createState() => _UserSettingsState();
 }
 
-class UserSettingsState extends State<UserSettings> {
+class _UserSettingsState extends State<UserSettings> {
   final formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
-  String? selectedSport;
-  DateTime? selectedDate = DateTime.now();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController currentPasswordController = TextEditingController();
+  TextEditingController newPasswordController = TextEditingController();
   TextEditingController locationController = TextEditingController();
-
-  Future<void> appendToJson(Map<String, dynamic> newEvent) async {
-    File file = File(
-        '/Users/arthurkowara/Documents/GitHub/CIS4030/playpal/assets/event_list.json');
-    String jsonString = await file.readAsString();
-    Map<String, dynamic> jsonData = json.decode(jsonString);
-    List<dynamic> existingEvents = jsonData['events'];
-    existingEvents.add(newEvent);
-    await file
-        .writeAsString(const JsonEncoder.withIndent('  ').convert(jsonData));
-  }
+  DateTime? dob;
 
   void showDatePicker(BuildContext context) {
-    date_time_picker.DatePicker.showDatePicker(
+    datatTimePicker.DatePicker.showDatePicker(
       context,
       showTitleActions: true,
-      minTime: DateTime.now(),
+      minTime: DateTime.parse("1900-01-01"),
+      currentTime: dob, 
       onChanged: (dateTime) {},
       onConfirm: (dateTime) {
         setState(() {
-          selectedDate = dateTime;
+          dob = dateTime;
         });
       },
-      locale: date_time_picker.LocaleType.en,
+      locale: datatTimePicker.LocaleType.en,
     );
   }
+
+ Future<void> appendToJson() async {
+  String userJson = await getUserJSON();
+  Map<String, dynamic> jsonData = json.decode(userJson);
+  jsonData['username'] = usernameController.text;
+  jsonData['password'] = newPasswordController.text;
+  jsonData['date_of_birth'] = dob.toString();
+  jsonData['location'] = locationController.text;
+  String updatedJsonString = JsonEncoder.withIndent('  ').convert(jsonData);
+  File file = File('/Users/arthurkowara/Documents/GitHub/CIS4030/playpal/assets/user.json');
+  await file.writeAsString(updatedJsonString);
+}
+
+  Future<String> getUserJSON() async {
+    File file = File(
+        '/Users/arthurkowara/Documents/GitHub/CIS4030/playpal/assets/user.json');
+    String jsonString = await file.readAsString();
+    return jsonString;
+  }
+
+  @override
+void initState() {
+  super.initState();
+  // Parse the JSON data and fill out the form
+  getUserJSON().then((userJson) {
+    final jsonData = json.decode(userJson);
+    setState(() {
+      usernameController.text = jsonData['username'];
+      currentPasswordController.text = jsonData['password'];
+      dob = DateTime.parse(jsonData['date_of_birth']);
+      locationController.text = jsonData['location'];
+    });
+  });
+}
 
   @override
   Widget build(BuildContext context) {
@@ -65,17 +89,7 @@ class UserSettingsState extends State<UserSettings> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 TextFormField(
-                  controller: nameController,
-                  decoration: const InputDecoration(labelText: 'Name'),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your name';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: nameController,
+                  controller: usernameController,
                   decoration: const InputDecoration(
                     labelText: 'User Name',
                     prefixIcon: SizedBox(
@@ -92,18 +106,18 @@ class UserSettingsState extends State<UserSettings> {
                   },
                 ),
                 TextFormField(
-                  controller: nameController,
-                  decoration:
-                      const InputDecoration(labelText: 'Current Password'),
+                  controller: currentPasswordController,
+                  decoration: const InputDecoration(labelText: 'Current Password'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter your current password';
+                      return 'Please enter your password';
                     }
                     return null;
                   },
+                  obscureText: true,
                 ),
                 TextFormField(
-                  controller: nameController,
+                  controller: newPasswordController,
                   decoration: const InputDecoration(labelText: 'New Password'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -111,6 +125,7 @@ class UserSettingsState extends State<UserSettings> {
                     }
                     return null;
                   },
+                  obscureText: true,
                 ),
                 InkWell(
                   onTap: () {
@@ -122,7 +137,7 @@ class UserSettingsState extends State<UserSettings> {
                       hintText: 'Select Date',
                     ),
                     child: Text(
-                      selectedDate.toString().substring(0, 10),
+                      dob.toString().substring(0, 10),
                     ),
                   ),
                 ),
@@ -143,6 +158,8 @@ class UserSettingsState extends State<UserSettings> {
                       onPressed: () {
                         if (formKey.currentState != null &&
                             formKey.currentState!.validate()) {
+                            appendToJson();
+                              
                           Navigator.pop(context);
                         }
                       },

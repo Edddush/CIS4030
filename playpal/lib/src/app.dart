@@ -77,7 +77,7 @@ class MyApp extends StatelessWidget {
               builder: (BuildContext context) {
                 switch (routeSettings.name) {
                   case UserSettings.routeName:
-                    return UserSettings(controller: settingsController);
+                    return UserSettings();
                   case EventDetailsView.routeName:
                     return const EventDetailsView();
                   case UserProfile.routeName:
