@@ -5,14 +5,17 @@ class UpcomingEventsProvider extends ChangeNotifier{
   final List<Event> _events = [];
   List<Event> get events => _events;
 
-  void addtoList(Event event){
-    _events.add(event);
-    notifyListeners();
+  Future<void> addToList(Event event) async {
+    if (isUpcomingEvent(event) == false) {
+      _events.add(event);
+      notifyListeners();
+    }
   }
 
-  void removeFromList(Event event){
+  Future<void> removeFromList(Event event) async {
     if(isUpcomingEvent(event)){
       _events.remove(event);
+      notifyListeners();
     }
   }
 

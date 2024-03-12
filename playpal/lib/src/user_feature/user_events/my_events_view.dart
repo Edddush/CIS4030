@@ -14,8 +14,7 @@ class MyEventsView extends StatelessWidget {
     final List<Event> events = provider.events;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Events'),
-      ),
+          backgroundColor: Colors.black54, title: const Text('My Events')),
       body: ListView.builder(
         // Providing a restorationId allows the ListView to restore the
         // scroll position when a user leaves and returns to the app after it
@@ -33,23 +32,9 @@ class MyEventsView extends StatelessWidget {
                 foregroundImage: NetworkImage(event.thumbnail),
               ),
               onTap: () {
-                // Navigate to the details page. If the user leaves and returns to
-                // the app after it has been killed while running in the
-                // background, the navigation stack is restored.
                 Navigator.restorablePushNamed(
-                    context,
-                    EventDetailsView.routeName,
-                    arguments: {
-                      'name': event.name,
-                      'sport': event.sport,
-                      'date': event.date,
-                      'time': event.time,
-                      'total_number_participants': event.totalParticipants,
-                      'total_current_participants': event.currentParticipants,
-                      'thumbnail': event.thumbnail,
-                      'description': event.description.join('\n')
-                    }
-                );
+                    context, EventDetailsView.routeName,
+                    arguments: event.toMap());
               });
         },
       ),

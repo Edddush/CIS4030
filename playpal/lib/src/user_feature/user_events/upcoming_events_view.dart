@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:playpal/providers/my_events_provider.dart';
+import 'package:playpal/providers/upcoming_events_provider.dart';
 import 'package:playpal/src/event_feature/event.dart';
 import 'package:playpal/src/event_feature/event_details_view.dart';
+import 'package:playpal/src/create_event/create_event.dart';
 import 'package:provider/provider.dart';
 
-class MyEventsView extends StatelessWidget {
-  const MyEventsView({super.key});
+class UpcomingEventsView extends StatelessWidget {
+  const UpcomingEventsView({super.key});
   static const routeName = '/upcoming_events';
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<MyEventsProvider>(context);
+    final provider = Provider.of<UpcomingEventsProvider>(context);
     final List<Event> events = provider.events;
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Events'),
+        backgroundColor: Colors.black54,
+        title: const Text('My Upcoming Events'),
       ),
       body: ListView.builder(
         // Providing a restorationId allows the ListView to restore the
         // scroll position when a user leaves and returns to the app after it
         // has been killed while running in the background.
-        restorationId: 'My Events',
+        restorationId: 'My Upcoming Events',
         itemCount: events.length,
         itemBuilder: (BuildContext context, int index) {
           final event = events[index];
@@ -33,23 +37,9 @@ class MyEventsView extends StatelessWidget {
                 foregroundImage: NetworkImage(event.thumbnail),
               ),
               onTap: () {
-                // Navigate to the details page. If the user leaves and returns to
-                // the app after it has been killed while running in the
-                // background, the navigation stack is restored.
                 Navigator.restorablePushNamed(
-                    context,
-                    EventDetailsView.routeName,
-                    arguments: {
-                      'name': event.name,
-                      'sport': event.sport,
-                      'date': event.date,
-                      'time': event.time,
-                      'total_number_participants': event.totalParticipants,
-                      'total_current_participants': event.currentParticipants,
-                      'thumbnail': event.thumbnail,
-                      'description': event.description.join('\n')
-                    }
-                );
+                    context, EventDetailsView.routeName,
+                    arguments: event.toMap());
               });
         },
       ),
