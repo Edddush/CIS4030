@@ -95,7 +95,8 @@
         "is a",
         "n",
         "example"
-      ]
+      ],
+      "is_past": false
     },
     {
       "name": "Basketball 7",
@@ -109,7 +110,8 @@
       "description": [
         "This",
         "description"
-      ]
+      ],
+      "is_past": false
     },
     {
       "name": "pickelball",
@@ -123,7 +125,23 @@
       "description": [
         "This",
         "desciption"
-      ]
+      ],
+      "is_past": false
+    },
+    {
+      "name": "event",
+      "sport": "Pickleball",
+      "location": "Toronto",
+      "date": "2024-03-12",
+      "time": "11:22 AM",
+      "total_participants": 6,
+      "current_participants": 0,
+      "thumbnail": "",
+      "description": [
+        "this",
+        "is"
+      ],
+      "isPast": false
     }
   ]
 }

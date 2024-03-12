@@ -1,28 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:provider/provider.dart';
+import 'package:playpal/providers/my_events_provider.dart';
 import 'event_feature/event_details_view.dart';
 import 'event_feature/event_list_view.dart';
 import 'settings/settings_controller.dart';
-import '../providers/my_events_provider.dart';
 import 'settings/settings_view.dart';
-import 'package:flutter/material.dart';
 import 'create_event/create_event.dart';
 import 'user_feature/user_profile.dart';
-import 'package:provider/provider.dart';
+import 'settings/settings_view.dart';
 import 'event_feature/login_page.dart';
-import 'settings/settings_controller.dart';
-import 'event_feature/event_list_view.dart';
-import 'event_feature/event_details_view.dart';
-import 'user_feature/user_events/my_events_view.dart';
-import 'package:playpal/providers/my_events_provider.dart';
-import 'user_feature/user_events/past_events_view.dart';
-import 'user_feature/user_events/upcoming_events_view.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:playpal/providers/past_events_provider.dart';
-import 'package:playpal/providers/upcoming_events_provider.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:provider/provider.dart';
+
 
 
 /// The Widget that configures your application.
@@ -46,11 +35,6 @@ class MyApp extends StatelessWidget {
               create: (context) => MyEventsProvider()),
         ],
         child: MaterialApp(
-          ChangeNotifierProvider<PastEventsProvider>(
-              create: (context) => PastEventsProvider()),
-          ChangeNotifierProvider<UpcomingEventsProvider>(
-              create: (context) => UpcomingEventsProvider())
-        ],
           // Providing a restorationScopeId allows the Navigator built by the
           // MaterialApp to restore the navigation stack when a user leaves and
           // returns to the app after it has been killed while running in the
@@ -84,7 +68,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(),
           darkTheme: ThemeData.dark(),
           themeMode: settingsController.themeMode,
-          home: const LoginPage(),
+          home: LoginPage(),
           // Define a function to handle named routes in order to support
           // Flutter web url navigation and deep linking.
           onGenerateRoute: (RouteSettings routeSettings) {
@@ -100,17 +84,10 @@ class MyApp extends StatelessWidget {
                     return const UserProfile();
                   case CreateEvent.routeName:
                     return const CreateEvent();
-                  case LoginPage.routeName:
-                    return const LoginPage();
-                  case MyEventsView.routeName:
-                    return const MyEventsView();
-                  case PastEventsView.routeName:
-                    return const PastEventsView();
-                  case UpcomingEventsView.routeName:
-                    return const UpcomingEventsView();
                   case EventListView.routeName:
                   default:
                     return const EventListView();
+                  
                 }
               },
             );
