@@ -112,36 +112,6 @@
         "description"
       ],
       "is_past": false
-    },
-    {
-      "name": "pickelball",
-      "sport": "Pickleball",
-      "location": "Guelph",
-      "date": "2024-03-10",
-      "time": "11:59 PM",
-      "total_participants": 2,
-      "current_participants": 0,
-      "thumbnail": "",
-      "description": [
-        "This",
-        "desciption"
-      ],
-      "is_past": false
-    },
-    {
-      "name": "event",
-      "sport": "Pickleball",
-      "location": "Toronto",
-      "date": "2024-03-12",
-      "time": "11:22 AM",
-      "total_participants": 6,
-      "current_participants": 0,
-      "thumbnail": "",
-      "description": [
-        "this",
-        "is"
-      ],
-      "isPast": false
     }
   ]
 }
