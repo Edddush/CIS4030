@@ -217,7 +217,7 @@ class CreateEventState extends State<CreateEvent> {
 
   Future<void> appendToJson(Map<String, dynamic> newEvent) async {
     File file = File(
-        '/Users/arthurkowara/Documents/GitHub/CIS4030/playpal/assets/event_list.json');
+        '/assets/event_list.json');
     String jsonString = await file.readAsString();
     Map<String, dynamic> jsonData = json.decode(jsonString);
     List<dynamic> existingEvents = jsonData['events'];

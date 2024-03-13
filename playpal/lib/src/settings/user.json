@@ -1,0 +1,97 @@
+{
+  "username": "kevin6",
+  "password": "hello",
+  "date_of_birth": "2004-04-22 00:00:00.000",
+  "location": "Toronto, ON",
+  "picture": "https://cdn.pixabay.com/photo/2018/08/28/13/29/avatar-3637561_960_720.png",
+  "my_events": [
+    {
+      "name": "Kevin's pickup",
+      "sport": "Football",
+      "location": "Toronto, ON",
+      "date": "March 16, 2024",
+      "time": "10:00",
+      "total_participants": 22,
+      "current_participants": 0,
+      "thumbnail": "https://cdn.pixabay.com/photo/2013/07/13/10/51/football-157930_960_720.png",
+      "description": [
+        "Bring your own boots",
+        "Free of charge",
+        "Wear shorts red or black shirt"
+      ]
+    },
+    {
+      "name": "Name 3",
+      "sport": "Basketball",
+      "location": "this",
+      "date": "2024-03-12",
+      "time": "11:46 PM",
+      "total_participants": 3,
+      "current_participants": 0,
+      "thumbnail": "https://cdn.pixabay.com/photo/2013/07/12/14/07/basketball-147794_960_720.png",
+      "description": [
+        "descriptions"
+      ]
+    },
+    {
+      "name": "Name 4",
+      "sport": "Basketball",
+      "location": "here",
+      "date": "2024-03-13",
+      "time": "12:11 AM",
+      "total_participants": 3,
+      "current_participants": 0,
+      "thumbnail": "https://cdn.pixabay.com/photo/2013/07/12/14/07/basketball-147794_960_720.png",
+      "description": [
+        "tghis"
+      ]
+    },
+    {
+      "name": "Example3",
+      "sport": "Basketball",
+      "location": "here",
+      "date": "2024-03-13",
+      "time": "12:30 AM",
+      "total_participants": 8,
+      "current_participants": 0,
+      "thumbnail": "https://cdn.pixabay.com/photo/2013/07/12/14/07/basketball-147794_960_720.png",
+      "description": [
+        "descr"
+      ]
+    }
+  ],
+  "past_events": [
+    {
+      "name": "The ballers meet",
+      "sport": "Basketball",
+      "location": "Guelph, ON",
+      "date": "March 25, 2024",
+      "time": "12:00",
+      "total_participants": 10,
+      "current_participants": 0,
+      "thumbnail": "https://cdn.pixabay.com/photo/2013/07/12/14/07/basketball-147794_960_720.png",
+      "description": [
+        "Enter from the east side of the building",
+        "Bring appropriate basketball shoes",
+        "Free of charge"
+      ]
+    }
+  ],
+  "upcoming_events": [
+    {
+      "name": "The face off",
+      "sport": "Tennis",
+      "location": "Hamilton, ON",
+      "date": "March 15, 2024",
+      "time": "15:00",
+      "total_participants": 4,
+      "current_participants": 0,
+      "thumbnail": "https://cdn.pixabay.com/photo/2017/01/31/15/31/tennis-2025095_960_720.png",
+      "description": [
+        "Bring a water bottle, it will be hot!",
+        "Tennis balls will be provided at the venue",
+        "Wear all purpose tennis shoes or clay specific ones"
+      ]
+    }
+  ]
+}

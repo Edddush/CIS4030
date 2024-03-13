@@ -8,6 +8,7 @@ import 'event_details_view.dart';
 import 'package:playpal/src/event_feature/hamburger_menu.dart';
 import 'package:playpal/src/create_event/create_event.dart';
 
+
 Future<List<Event>> fetchEventsFromFile() async {
   // Read the JSON data from the file
   final String response = await rootBundle.loadString('assets/event_list.json');

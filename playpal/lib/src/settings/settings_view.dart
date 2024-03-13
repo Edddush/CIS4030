@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:flutter/services.dart' show rootBundle;
+
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as date_time_picker;
 
@@ -54,12 +56,8 @@ class _UserSettingsState extends State<UserSettings> {
 }
 
   Future<String> getUserJSON() async {
-
-    File file = File('/Users/arthurkowara/Documents/GitHub/CIS4030/playpal/assets/user.json');
-    // File file = File(
-    //     '/Users/eddydushime/Documents/Art/Uni/CIS4030/Milestone/M2/CIS4030/playpal/assets/user.json');
-    String jsonString = await file.readAsString();
-    return jsonString;
+    final String response = await rootBundle.loadString('assets/user.json');
+    return response;
   }
 
   @override
