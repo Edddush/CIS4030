@@ -117,6 +117,7 @@ void initState() {
                     return null;
                   },
                   obscureText: true,
+                  enabled: false,
                 ),
                 TextFormField(
                   controller: newPasswordController,
