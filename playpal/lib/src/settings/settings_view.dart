@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
-    as datatTimePicker;
+    as date_time_picker;
 
 
 class UserSettings extends StatefulWidget {
   static const routeName = '/user_settings';
-  const UserSettings({Key? key}) : super(key: key);
+  const UserSettings({super.key});
 
   @override
   _UserSettingsState createState() => _UserSettingsState();
@@ -23,7 +23,7 @@ class _UserSettingsState extends State<UserSettings> {
   DateTime? dob;
 
   void showDatePicker(BuildContext context) {
-    datatTimePicker.DatePicker.showDatePicker(
+    date_time_picker.DatePicker.showDatePicker(
       context,
       showTitleActions: true,
       minTime: DateTime.parse("1900-01-01"),
@@ -34,7 +34,7 @@ class _UserSettingsState extends State<UserSettings> {
           dob = dateTime;
         });
       },
-      locale: datatTimePicker.LocaleType.en,
+      locale: date_time_picker.LocaleType.en,
     );
   }
 
@@ -49,12 +49,15 @@ class _UserSettingsState extends State<UserSettings> {
   jsonData['location'] = locationController.text;
   String updatedJsonString = JsonEncoder.withIndent('  ').convert(jsonData);
   File file = File('/Users/arthurkowara/Documents/GitHub/CIS4030/playpal/assets/user.json');
+  // File file = File('/Users/eddydushime/Documents/Art/Uni/CIS4030/Milestone/M2/CIS4030/playpal/assets/event_list.json');
   await file.writeAsString(updatedJsonString);
 }
 
   Future<String> getUserJSON() async {
-    File file = File(
-        '/Users/arthurkowara/Documents/GitHub/CIS4030/playpal/assets/user.json');
+
+    File file = File('/Users/arthurkowara/Documents/GitHub/CIS4030/playpal/assets/user.json');
+    // File file = File(
+    //     '/Users/eddydushime/Documents/Art/Uni/CIS4030/Milestone/M2/CIS4030/playpal/assets/user.json');
     String jsonString = await file.readAsString();
     return jsonString;
   }

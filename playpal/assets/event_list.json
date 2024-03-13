@@ -47,6 +47,54 @@
         "Wear all purpose tennis shoes or clay specific ones"
       ],
       "is_past": false
+    },
+    {
+      "name": "2v2",
+      "sport": "Tennis",
+      "location": "Hamilton, ON",
+      "date": "2024-03-19",
+      "time": "2:28 AM",
+      "total_participants": 2,
+      "current_participants": 0,
+      "thumbnail": "https://cdn.pixabay.com/photo/2017/01/31/15/31/tennis-2025095_960_720.png",
+      "description": [
+        "Bring a water bottle, it will be hot!",
+        "Tennis balls will be provided at the venue",
+        "Wear all purpose tennis shoes or clay specific ones"
+      ],
+      "is_past": false
+    },
+    {
+      "name": "Guelph Division Final",
+      "sport": "Tennis",
+      "location": "Hamilton, ON",
+      "date": "2024-03-21",
+      "time": "2:28 AM",
+      "total_participants": 4,
+      "current_participants": 0,
+      "thumbnail": "https://cdn.pixabay.com/photo/2017/01/31/15/31/tennis-2025095_960_720.png",
+      "description": [
+        "Bring a water bottle, it will be hot!",
+        "Tennis balls will be provided at the venue",
+        "Wear all purpose tennis shoes or clay specific ones"
+      ],
+      "is_past": false
+    },
+    {
+      "name": "Kevin's pickup",
+      "sport": "Football",
+      "location": "Guelph, ON",
+      "date": "2024-08-16",
+      "time": "10:00 AM",
+      "total_participants": 22,
+      "current_participants": 0,
+      "thumbnail": "https://cdn.pixabay.com/photo/2013/07/13/10/51/football-157930_960_720.png",
+      "description": [
+        "Bring your own boots",
+        "Free of charge",
+        "Wear shorts red or black shirt"
+      ],
+      "is_past": false
     }
   ]
 }
