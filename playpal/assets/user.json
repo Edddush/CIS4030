@@ -19,6 +19,45 @@
         "Free of charge",
         "Wear shorts red or black shirt"
       ]
+    },
+    {
+      "name": "Name 3",
+      "sport": "Basketball",
+      "location": "this",
+      "date": "2024-03-12",
+      "time": "11:46 PM",
+      "total_participants": 3,
+      "current_participants": 0,
+      "thumbnail": "https://cdn.pixabay.com/photo/2013/07/12/14/07/basketball-147794_960_720.png",
+      "description": [
+        "descriptions"
+      ]
+    },
+    {
+      "name": "Name 4",
+      "sport": "Basketball",
+      "location": "here",
+      "date": "2024-03-13",
+      "time": "12:11 AM",
+      "total_participants": 3,
+      "current_participants": 0,
+      "thumbnail": "https://cdn.pixabay.com/photo/2013/07/12/14/07/basketball-147794_960_720.png",
+      "description": [
+        "tghis"
+      ]
+    },
+    {
+      "name": "Example3",
+      "sport": "Basketball",
+      "location": "here",
+      "date": "2024-03-13",
+      "time": "12:30 AM",
+      "total_participants": 8,
+      "current_participants": 0,
+      "thumbnail": "https://cdn.pixabay.com/photo/2013/07/12/14/07/basketball-147794_960_720.png",
+      "description": [
+        "descr"
+      ]
     }
   ],
   "past_events": [

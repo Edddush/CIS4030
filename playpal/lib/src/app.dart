@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:playpal/providers/my_events_provider.dart';
+import 'package:playpal/providers/past_events_provider.dart';
 import 'event_feature/event_details_view.dart';
 import 'event_feature/event_list_view.dart';
 import 'settings/settings_controller.dart';
@@ -11,8 +12,10 @@ import 'user_feature/user_profile.dart';
 import 'settings/settings_view.dart';
 import 'event_feature/login_page.dart';
 import 'package:provider/provider.dart';
-
-
+import 'user_feature/user_events/past_events_view.dart';
+import 'user_feature/user_events/my_events_view.dart';
+import 'package:playpal/providers/upcoming_events_provider.dart';
+import 'user_feature/user_events/upcoming_events_view.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
@@ -33,6 +36,10 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider<MyEventsProvider>(
               create: (context) => MyEventsProvider()),
+          ChangeNotifierProvider<PastEventsProvider>(
+              create: (context) => PastEventsProvider()),
+          ChangeNotifierProvider<UpcomingEventsProvider>(
+              create: (context) => UpcomingEventsProvider()),
         ],
         child: MaterialApp(
           // Providing a restorationScopeId allows the Navigator built by the
@@ -78,12 +85,18 @@ class MyApp extends StatelessWidget {
                 switch (routeSettings.name) {
                   case UserSettings.routeName:
                     return UserSettings();
+                  case MyEventsView.routeName:
+                    return const MyEventsView();
+                  case UpcomingEventsView.routeName:
+                    return const UpcomingEventsView();
                   case EventDetailsView.routeName:
                     return const EventDetailsView();
                   case UserProfile.routeName:
                     return const UserProfile();
                   case CreateEvent.routeName:
                     return const CreateEvent();
+                  case PastEventsView.routeName:
+                    return const PastEventsView();
                   case EventListView.routeName:
                   default:
                     return const EventListView();
