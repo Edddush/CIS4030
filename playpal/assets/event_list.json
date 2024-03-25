@@ -49,82 +49,50 @@
       "is_past": false
     },
     {
-      "name": "Name",
+      "name": "2v2",
       "sport": "Tennis",
-      "location": "Toronto, ON",
-      "date": "2024-03-08",
-      "time": "1:12 PM",
+      "location": "Hamilton, ON",
+      "date": "2024-03-19",
+      "time": "2:28 AM",
+      "total_participants": 2,
+      "current_participants": 0,
+      "thumbnail": "https://cdn.pixabay.com/photo/2017/01/31/15/31/tennis-2025095_960_720.png",
+      "description": [
+        "Bring a water bottle, it will be hot!",
+        "Tennis balls will be provided at the venue",
+        "Wear all purpose tennis shoes or clay specific ones"
+      ],
+      "is_past": false
+    },
+    {
+      "name": "Guelph Division Final",
+      "sport": "Tennis",
+      "location": "Hamilton, ON",
+      "date": "2024-03-21",
+      "time": "2:28 AM",
       "total_participants": 4,
       "current_participants": 0,
       "thumbnail": "https://cdn.pixabay.com/photo/2017/01/31/15/31/tennis-2025095_960_720.png",
       "description": [
-        "This",
-        "is",
-        "an",
-        "example"
+        "Bring a water bottle, it will be hot!",
+        "Tennis balls will be provided at the venue",
+        "Wear all purpose tennis shoes or clay specific ones"
       ],
       "is_past": false
     },
     {
-      "name": "ExampleCreate",
-      "sport": "Tennis",
-      "location": "Toronto, ON",
-      "date": "2024-03-08",
-      "time": "1:18 PM",
-      "total_participants": 4,
+      "name": "Kevin's pickup",
+      "sport": "Football",
+      "location": "Guelph, ON",
+      "date": "2024-08-16",
+      "time": "10:00 AM",
+      "total_participants": 22,
       "current_participants": 0,
-      "thumbnail": "https://cdn.pixabay.com/photo/2017/01/31/15/31/tennis-2025095_960_720.png",
+      "thumbnail": "https://cdn.pixabay.com/photo/2013/07/13/10/51/football-157930_960_720.png",
       "description": [
-        "This",
-        "is an",
-        "example"
-      ],
-      "is_past": false
-    },
-    {
-      "name": "Create event 2",
-      "sport": "Basketball",
-      "location": "Toronto, ON",
-      "date": "2024-03-08",
-      "time": "1:23 PM",
-      "total_participants": 10,
-      "current_participants": 0,
-      "thumbnail": "https://cdn.pixabay.com/photo/2013/07/12/14/07/basketball-147794_960_720.png",
-      "description": [
-        "This",
-        "is a",
-        "n",
-        "example"
-      ],
-      "is_past": false
-    },
-    {
-      "name": "Basketball 7",
-      "sport": "Basketball",
-      "location": "Guelph",
-      "date": "2024-03-11",
-      "time": "11:57 PM",
-      "total_participants": 4,
-      "current_participants": 0,
-      "thumbnail": "https://cdn.pixabay.com/photo/2013/07/12/14/07/basketball-147794_960_720.png",
-      "description": [
-        "This",
-        "description"
-      ],
-      "is_past": false
-    },
-    {
-      "name": "Event Name",
-      "sport": "Basketball",
-      "location": "Toronto",
-      "date": "2024-03-12",
-      "time": "5:40 PM",
-      "total_participants": 6,
-      "current_participants": 0,
-      "thumbnail": "https://cdn.pixabay.com/photo/2013/07/12/14/07/basketball-147794_960_720.png",
-      "description": [
-        "This",
-        "eample"
+        "Bring your own boots",
+        "Free of charge",
+        "Wear shorts red or black shirt"
       ],
       "is_past": false
     }

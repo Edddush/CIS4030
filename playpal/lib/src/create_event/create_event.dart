@@ -157,13 +157,13 @@ class CreateEventState extends State<CreateEvent> {
                           }else if (selectedSport == "Tennis"){
                             thumbnail = "https://cdn.pixabay.com/photo/2017/01/31/15/31/tennis-2025095_960_720.png";
                           }else if (selectedSport == "Hockey"){
-                            thumbnail = "https://pixabay.com/get/ge8fac783f06255bb3445a38e94ec10c2dc5b5d0003df4945ce54d828a6770504d4eb4cd0ae7d9e376403ba0a6b402089_1280.png";
+                            thumbnail = "https://media.istockphoto.com/id/1464504444/photo/ice-hockey-players-on-the-grand-ice-arena-stadium.jpg?s=612x612&w=0&k=20&c=EQThnou2nV5mScmdWyMXbxo2B03zD3ACy9rnfMs_JPI=";
                           }else if (selectedSport == "Squash"){
-                            thumbnail = "https://pixabay.com/get/g367fef0b1a821e795d9d1d873e69dad54cf5284f600d475532a6e6f8683e42ce54841e67dea1525c2f1f6a9c30be768e_1280.png";
+                            thumbnail = "https://media.istockphoto.com/id/1400118233/photo/closeup-of-unknown-athletic-squash-player-using-a-racket-to-hit-a-ball-during-a-court-game.webp?s=1024x1024&w=is&k=20&c=pGYz9x6TXj2EZYNFDvBTjEjCZKXgv2-HlexIFnLEHZ4=";
                           }else if (selectedSport == "Volleyball"){
-                            thumbnail = "https://pixabay.com/get/gfa800b58c884f9746b7833bc48741ad80321a50eb469991570ac0552a14fb7cc4746eb463e420f30591d1ef89504df942cb4a86f604eaff1127bb0ee3d3998f1_1280.png";
+                            thumbnail = "https://media.istockphoto.com/id/618341990/photo/volleyball-ball-isolated-on-white-background.jpg?b=1&s=612x612&w=0&k=20&c=F8CwbWG-uGZbWc4ry0nA3iZZAXBKX7hVsjU5fI53QTQ=";
                           }else if (selectedSport == "PickelBall"){
-                            thumbnail = "https://pixabay.com/get/g6e58591ab62e3a1dd8bae7037148c02d10b6bf76c53cf43bbd0f5faca0fcc837590590599270942f64d4caa8bd3f2242de27947fc5f6d3b3330d6afe0a5628d1_1280.png";
+                            thumbnail = "https://images.pexels.com/photos/17299534/pexels-photo-17299534/free-photo-of-pickleball-paddle-ball-court-net.jpeg?auto=compress&cs=tinysrgb&w=600";
                           }
                           Map<String, dynamic> eventData = {
                             'name': nameController.text,
@@ -217,7 +217,7 @@ class CreateEventState extends State<CreateEvent> {
 
   Future<void> appendToJson(Map<String, dynamic> newEvent) async {
     File file = File(
-        '/Users/arthurkowara/Documents/GitHub/CIS4030/playpal/assets/event_list.json');
+        '/assets/event_list.json');
     String jsonString = await file.readAsString();
     Map<String, dynamic> jsonData = json.decode(jsonString);
     List<dynamic> existingEvents = jsonData['events'];
