@@ -21,12 +21,13 @@ class CreateEventState extends State<CreateEvent> {
   final formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   String selectedSport = "Basketball";
+  String selectedLocation = "Event Center";
   DateTime? selectedDate = DateTime.now();
   TimeOfDay startTime = TimeOfDay.now();
   int maxNumParticipants = 0;
-  TextEditingController locationController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   List<String> sports = ['Basketball', 'Hockey', 'Pickleball', 'Soccer', 'Squash', 'Tennis', "Volleyball"];
+  List<String> locations = ['Event Center', 'Fieldhouse', 'Mitchell Gym', 'Small Gym', 'Squash Courts', 'Tennis Courts', "West Gym"];
   TextEditingController numberController = TextEditingController();
 
   @override
@@ -103,12 +104,23 @@ class CreateEventState extends State<CreateEvent> {
                     child: Text(startTime.format(context)),
                   ),
                 ),
-                TextFormField(
-                  controller: locationController,
+                DropdownButtonFormField(
                   decoration: const InputDecoration(labelText: 'Location'),
+                  value: selectedLocation,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedLocation = value as String;
+                    });
+                  },
+                  items: locations.map((String location) {
+                    return DropdownMenuItem<String>(
+                      value: location,
+                      child: Text(location),
+                    );
+                  }).toList(),
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter the location';
+                    if (value == null) {
+                      return 'Please select a Location';
                     }
                     return null;
                   },
@@ -168,7 +180,7 @@ class CreateEventState extends State<CreateEvent> {
                           Map<String, dynamic> eventData = {
                             'name': nameController.text,
                             'sport': selectedSport,
-                            'location': locationController.text,
+                            'location': selectedLocation,
                             'date': selectedDate.toString().substring(0, 10),
                             'time': startTime.format(context),
                             'total_participants': maxNumParticipants,
@@ -180,7 +192,7 @@ class CreateEventState extends State<CreateEvent> {
                           event = Event(
                             name: nameController.text,
                             sport: selectedSport,
-                            location: locationController.text,
+                            location: selectedLocation,
                             date: selectedDate.toString().substring(0, 10),
                             time: startTime.format(context),
                             totalParticipants: maxNumParticipants,
