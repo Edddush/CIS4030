@@ -25,10 +25,15 @@ class CreateEventState extends State<CreateEvent> {
   DateTime? selectedDate = DateTime.now();
   TimeOfDay startTime = TimeOfDay.now();
   int maxNumParticipants = 0;
+  String cost = "";
   TextEditingController descriptionController = TextEditingController();
+  TextEditingController dressCodeController = TextEditingController();
+  TextEditingController costController = TextEditingController();
   List<String> sports = ['Basketball', 'Hockey', 'Pickleball', 'Soccer', 'Squash', 'Tennis', "Volleyball"];
   List<String> locations = ['Event Center', 'Fieldhouse', 'Mitchell Gym', 'Small Gym', 'Squash Courts', 'Tennis Courts', "West Gym"];
   TextEditingController numberController = TextEditingController();
+  TextEditingController disclaimerController = TextEditingController();
+  TextEditingController equipmentController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -140,15 +145,61 @@ class CreateEventState extends State<CreateEvent> {
                     });
                   },
                 ),
-                TextFormField(
-                  controller: descriptionController,
+                TextField(
+                  controller: costController,
                   decoration: const InputDecoration(
-                    labelText: 'Description',
+                    labelText: 'Cost',
+                    prefixIcon: Icon(Icons.attach_money)
                   ),
-                  minLines: 1,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    setState(() {
+                      if (value == "0"){
+                        cost = "Free";
+                      }
+                      else{
+                        cost = "\$" + value;
+                      }
+                        
+
+                    });
+                  },
+                ),
+                TextFormField(
+                  controller: dressCodeController,
+                  decoration: const InputDecoration(
+                    labelText: 'Dress Code',
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a description';
+                      return 'Please enter the dress code';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: equipmentController,
+                  decoration: const InputDecoration(
+                    labelText: 'Equipment Needed',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter equipment needed';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: disclaimerController,
+                  decoration: const InputDecoration(
+                    labelText: 'Additional Information',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter additional information';
                     }
                     return null;
                   },
@@ -159,7 +210,7 @@ class CreateEventState extends State<CreateEvent> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (formKey.currentState != null && formKey.currentState!.validate()) {
-                          List<String> descriptionArray = descriptionController.text.split(',').map((e) => e.trim()).toList();
+                          List<String> descriptionArray = [cost, equipmentController.text, disclaimerController.text, dressCodeController.text];
                           Event event;
                           String thumbnail = "";
                           if (selectedSport == "Basketball"){
