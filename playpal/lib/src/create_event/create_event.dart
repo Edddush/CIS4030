@@ -21,13 +21,19 @@ class CreateEventState extends State<CreateEvent> {
   final formKey = GlobalKey<FormState>();
   TextEditingController nameController = TextEditingController();
   String selectedSport = "Basketball";
+  String selectedLocation = "Event Center";
   DateTime? selectedDate = DateTime.now();
   TimeOfDay startTime = TimeOfDay.now();
   int maxNumParticipants = 0;
-  TextEditingController locationController = TextEditingController();
+  String cost = "";
   TextEditingController descriptionController = TextEditingController();
+  TextEditingController dressCodeController = TextEditingController();
+  TextEditingController costController = TextEditingController();
   List<String> sports = ['Basketball', 'Hockey', 'Pickleball', 'Soccer', 'Squash', 'Tennis', "Volleyball"];
+  List<String> locations = ['Event Center', 'Fieldhouse', 'Mitchell Gym', 'Small Gym', 'Squash Courts', 'Tennis Courts', "West Gym"];
   TextEditingController numberController = TextEditingController();
+  TextEditingController disclaimerController = TextEditingController();
+  TextEditingController equipmentController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -103,12 +109,23 @@ class CreateEventState extends State<CreateEvent> {
                     child: Text(startTime.format(context)),
                   ),
                 ),
-                TextFormField(
-                  controller: locationController,
+                DropdownButtonFormField(
                   decoration: const InputDecoration(labelText: 'Location'),
+                  value: selectedLocation,
+                  onChanged: (value) {
+                    setState(() {
+                      selectedLocation = value as String;
+                    });
+                  },
+                  items: locations.map((String location) {
+                    return DropdownMenuItem<String>(
+                      value: location,
+                      child: Text(location),
+                    );
+                  }).toList(),
                   validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter the location';
+                    if (value == null) {
+                      return 'Please select a Location';
                     }
                     return null;
                   },
@@ -128,15 +145,61 @@ class CreateEventState extends State<CreateEvent> {
                     });
                   },
                 ),
-                TextFormField(
-                  controller: descriptionController,
+                TextField(
+                  controller: costController,
                   decoration: const InputDecoration(
-                    labelText: 'Description',
+                    labelText: 'Cost',
+                    prefixIcon: Icon(Icons.attach_money)
                   ),
-                  minLines: 1,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  keyboardType: TextInputType.number,
+                  onChanged: (value) {
+                    setState(() {
+                      if (value == "0"){
+                        cost = "Free";
+                      }
+                      else{
+                        cost = "\$" + value;
+                      }
+                        
+
+                    });
+                  },
+                ),
+                TextFormField(
+                  controller: dressCodeController,
+                  decoration: const InputDecoration(
+                    labelText: 'Dress Code',
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Please enter a description';
+                      return 'Please enter the dress code';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: equipmentController,
+                  decoration: const InputDecoration(
+                    labelText: 'Equipment Needed',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter equipment needed';
+                    }
+                    return null;
+                  },
+                ),
+                TextFormField(
+                  controller: disclaimerController,
+                  decoration: const InputDecoration(
+                    labelText: 'Additional Information',
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter additional information';
                     }
                     return null;
                   },
@@ -147,7 +210,7 @@ class CreateEventState extends State<CreateEvent> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (formKey.currentState != null && formKey.currentState!.validate()) {
-                          List<String> descriptionArray = descriptionController.text.split(',').map((e) => e.trim()).toList();
+                          List<String> descriptionArray = [cost, equipmentController.text, disclaimerController.text, dressCodeController.text];
                           Event event;
                           String thumbnail = "";
                           if (selectedSport == "Basketball"){
@@ -168,7 +231,7 @@ class CreateEventState extends State<CreateEvent> {
                           Map<String, dynamic> eventData = {
                             'name': nameController.text,
                             'sport': selectedSport,
-                            'location': locationController.text,
+                            'location': selectedLocation,
                             'date': selectedDate.toString().substring(0, 10),
                             'time': startTime.format(context),
                             'total_participants': maxNumParticipants,
@@ -180,7 +243,7 @@ class CreateEventState extends State<CreateEvent> {
                           event = Event(
                             name: nameController.text,
                             sport: selectedSport,
-                            location: locationController.text,
+                            location: selectedLocation,
                             date: selectedDate.toString().substring(0, 10),
                             time: startTime.format(context),
                             totalParticipants: maxNumParticipants,

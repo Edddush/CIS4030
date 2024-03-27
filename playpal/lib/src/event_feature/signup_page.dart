@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'event_list_view.dart'; // Import your EventListView page
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+  as datatTimePicker;
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -9,15 +11,20 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController password2Controller = TextEditingController();
+  DateTime? selectedDate = DateTime.now();
   // Add more controllers as needed for additional sign-up information
 
   void _signUp() {
-    // Placeholder for sign-up logic
-    // Implement your sign-up logic here, possibly including saving the new user data to your backend or local storage.
-
-    // After successful sign-up, navigate to the EventListView
+    Map<String, dynamic> userData = {
+     'username': usernameController.text,
+     'email': emailController.text,
+    'password': passwordController.text,
+     'dob': selectedDate.toString().substring(0, 10)
+    };
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const EventListView()),
@@ -35,24 +42,111 @@ class _SignUpPageState extends State<SignUpPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextField(
-              controller: _usernameController,
-              decoration: const InputDecoration(labelText: 'Username'),
+            TextFormField(
+                controller: emailController,
+                decoration: const InputDecoration(
+                labelText: 'Email',
+              ),
+                validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your email';
+                }
+                return null;
+               },
             ),
-            TextField(
-              controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
+            TextFormField(
+                controller: usernameController,
+                decoration: const InputDecoration(
+                labelText: 'Username',
+              ),
+                validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a unique username';
+                }
+                return null;
+               },
             ),
-            // Include other fields as necessary
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _signUp,
-              child: const Text('Sign Up'),
+            TextFormField(
+                controller: passwordController,
+                decoration: const InputDecoration(
+                labelText: 'Password',
+              ),
+                validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter the password.';
+                }
+                else if(value != password2Controller.text){
+                  return 'Passwords do not match';
+                }
+                return null;
+               },
             ),
+            TextFormField(
+                controller: password2Controller,
+                decoration: const InputDecoration(
+                labelText: 'Re-enter Password',
+              ),
+                validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please re-enter the password.';
+                }
+                else if(value != passwordController.text){
+                  return 'Passwords do not match';
+                }
+                return null;
+               },
+            ),
+            InkWell(
+                  onTap: () {
+                    showDatePicker(context);
+                  },
+                  child: InputDecorator(
+                    decoration: const InputDecoration(
+                      labelText: 'Date of birth',
+                      hintText: 'Select Date',
+                    ),
+                    child: Text(
+                      selectedDate.toString().substring(0, 10),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 32.0),
+                  child: Center(
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _signUp();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: Size(200, 50),
+                        padding: EdgeInsets.symmetric(horizontal: 32.0),
+                        backgroundColor: Colors.cyan[900],
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text(
+                        'Sign Up',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                    ),
+                  ),
+                ),
           ],
         ),
       ),
+    );
+  }
+  void showDatePicker(BuildContext context) {
+    datatTimePicker.DatePicker.showDatePicker(
+      context,
+      showTitleActions: true,
+      maxTime: DateTime.now(),
+      onChanged: (dateTime) {},
+      onConfirm: (dateTime) {
+        setState(() {
+          selectedDate = dateTime;
+        });
+      },
+      locale: datatTimePicker.LocaleType.en,
     );
   }
 }
