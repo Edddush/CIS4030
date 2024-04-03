@@ -94,7 +94,7 @@ class MyApp extends StatelessWidget {
                     return const PastEventsView();
                   case EventListView.routeName:
                   default:
-                    return const EventListView();
+                    return EventListView();
                 }
               },
             );

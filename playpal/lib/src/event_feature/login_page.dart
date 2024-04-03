@@ -19,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
     // If login is successful, navigate to the EventListView
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const EventListView()),
+      MaterialPageRoute(builder: (context) => EventListView()),
     );
   }
 

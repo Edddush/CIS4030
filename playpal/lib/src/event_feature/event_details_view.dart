@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:playpal/src/event_feature/event_list_view.dart';
 import 'event.dart';
 import 'package:playpal/providers/upcoming_events_provider.dart';
 import 'package:provider/provider.dart';
