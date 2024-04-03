@@ -123,7 +123,6 @@ class Details extends StatelessWidget {
             style: const TextStyle(fontSize: 18),
           ),
         ),
-        const MapScreen(),
         Align(
           alignment: Alignment.bottomCenter,
           child: provider.isUpcomingEvent(event)
@@ -180,19 +179,17 @@ class MapScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
+    return 
+    FlutterMap(
+      options: MapOptions(
+      center: LatLng(59.438484, 24.742595),
+      zoom: 14,
+      keepAlive: true
+  ),
       children: [
-        FlutterMap(
-          options: const MapOptions(
-            initialCenter: LatLng(51, 50),
-            initialZoom: 3,
-          ),
-          children: [
-            TileLayer(
-              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              subdomains: const ['a', 'b', 'c'],
-            ),
-          ],
+        TileLayer(
+          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          subdomains: const ['a', 'b', 'c'],
         ),
       ],
     );
