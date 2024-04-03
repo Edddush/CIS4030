@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
+import 'package:playpal/src/event_feature/event_details_view.dart';
 import 'event.dart';
 import 'dart:async';
 import 'dart:convert';
-import 'event_details_view.dart';
 import 'package:playpal/src/event_feature/hamburger_menu.dart';
 
 Future<List<Event>> fetchEventsFromFile() async {
@@ -20,9 +20,10 @@ List<Event> parseEvents(String responseBody) {
   return parsed.map<Event>((json) => Event.fromJson(json)).toList();
 }
 
-/// Displays a list of SampleItems.
+/// Displays a list of events.
 class EventListView extends StatelessWidget {
   const EventListView({super.key});
+
   static const routeName = '/events';
 
   @override
@@ -35,16 +36,17 @@ class EventListView extends StatelessWidget {
         foregroundColor: Colors.white,
       ),
       body: FutureBuilder<List<Event>>(
-          future: fetchEventsFromFile(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return const Center(child: Text('An error occurred!'));
-            } else if (snapshot.hasData) {
-              return EventList(events: snapshot.data!);
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          }),
+        future: fetchEventsFromFile(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return const Center(child: Text('An error occurred!'));
+          } else if (snapshot.hasData) {
+            return EventList(events: snapshot.data!);
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         foregroundColor: Colors.white,
@@ -56,6 +58,7 @@ class EventListView extends StatelessWidget {
   }
 }
 
+/// Widget to display a list of events.
 class EventList extends StatelessWidget {
   const EventList({super.key, required this.events});
 
@@ -70,51 +73,85 @@ class EventList extends StatelessWidget {
         final event = events[index];
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-          child: Card(
-            elevation: 4.0, // Optional: adds a shadow to each card
-            child: ListTile(
-              title: Text(
-                event.name,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold, // Making name text bold
-                ),
-              ),
-              subtitle: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    event.sport,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600, // Making sport text bold
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text('Location: ${event.location}'),
-                  const SizedBox(height: 4),
-                  Text('Date: ${event.date}, ${event.time}'),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Participants: ${event.currentParticipants}/${event.totalParticipants}',
-                  ),
-                ],
-              ),
-              leading: CircleAvatar(
-                foregroundImage: NetworkImage(event.thumbnail),
-              ),
-              onTap: () {
-                Navigator.restorablePushNamed(
-                  context,
-                  EventDetailsView.routeName,
-                  arguments: event.toMap(),
-                );
-              },
-            ),
-          ),
+          child: EventListItem(event: event),
         );
       },
     );
   }
 }
+
+/// Widget to display an individual event item.
+class EventListItem extends StatelessWidget {
+  const EventListItem({super.key, required this.event});
+
+  final Event event;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.restorablePushNamed(
+          context,
+          EventDetailsView.routeName,
+          arguments: event.toMap(),
+        );
+      },
+      child: Card(
+        elevation: 4.0,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(event.thumbnail),
+              ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      event.name,
+                      style: const TextStyle(
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      event.sport,
+                      style: const TextStyle(
+                        fontSize: 14.0,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(height: 8.0),
+                    Text(
+                      'Location: ${event.location}',
+                      style: const TextStyle(fontSize: 14.0),
+                    ),
+                    Text(
+                      'Date: ${event.date}, ${event.time}',
+                      style: const TextStyle(fontSize: 14.0),
+                    ),
+                    Text(
+                      'Participants: ${event.currentParticipants}/${event.totalParticipants}',
+                      style: const TextStyle(fontSize: 14.0),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 
 
 // import 'package:firebase_core/firebase_core.dart';

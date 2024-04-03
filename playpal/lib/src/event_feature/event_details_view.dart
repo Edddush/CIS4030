@@ -1,196 +1,154 @@
-import 'event.dart';
 import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:playpal/src/event_feature/event_list_view.dart';
+import 'event.dart';
 import 'package:playpal/providers/upcoming_events_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
 
 class EventDetailsView extends StatelessWidget {
   const EventDetailsView({super.key});
-
-  static const routeName = '/event';
+  static const routeName = '/event_details';
 
   @override
   Widget build(BuildContext context) {
+    GoogleMapController mapController;
+
     final Map<String, dynamic> argument =
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final Event eventArgument = Event.fromJson(argument);
+    final Event event = Event.fromJson(argument);
+    final provider = Provider.of<UpcomingEventsProvider>(context);
+    final String participantCount = '${event.currentParticipants}/${event.totalParticipants}';
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(eventArgument.name),
-        backgroundColor: Colors.black54,
-        foregroundColor: Colors.white,
+        title: const Text('Event Details'),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          FixedImage(thumbnail: eventArgument.thumbnail),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-              children: [
-                Details(event: eventArgument),
-                // Add MapScreen widget here
-                // MapScreen(), // This will display the map
-              ],
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Event Image
+            Image.network(event.thumbnail),
+            const SizedBox(height: 16),
+            // Event Name
+            Text(
+              event.name,
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
             ),
+            const Divider(),
+            // Event Details
+            _buildEventDetailRow(context, 'Sport', event.sport),
+            _buildEventDetailRow(context, 'Location', event.location),
+            _buildEventDetailRow(context, 'Date', event.date),
+            _buildEventDetailRow(context, 'Time', event.time),
+            _buildEventDetailRow(
+              context,
+              'Participants', participantCount
             ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class FixedImage extends StatelessWidget {
-  const FixedImage({super.key, required this.thumbnail});
-
-  final String thumbnail;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 200,
-      child: Card(
-        child: Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: NetworkImage(thumbnail),
-              fit: BoxFit.cover,
+            const Divider(),
+            const Text(
+              'Description:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-          ),
+            const SizedBox(height: 4),
+            ...event.description.map((desc) => Text(desc)),
+            const SizedBox(height: 16),
+
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: provider.isUpcomingEvent(event)
+                  ? ElevatedButton(
+                      onPressed: () {
+                        event.removeParticipant();
+                        provider.removeFromList(event);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        padding: const EdgeInsets.all(16),
+                      ),
+                      child: const Text(
+                        'Leave Event',
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
+                    )
+                  : ElevatedButton(
+                      onPressed: () {
+                        event.addParticipant();
+                        provider.addToList(event);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        padding: const EdgeInsets.all(16),
+                      ),
+                      child: const Text(
+                        'Join Event',
+                        style: TextStyle(fontSize: 18, color: Colors.white),
+                      ),
+                    ),
+            ),
+            const SizedBox(height: 16),
+            // Google Map
+
+            Container(
+              height: 300,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.grey,
+                    spreadRadius: 1,
+                    blurRadius: 5,
+                  ),
+                ],
+              ),
+              child: GoogleMap(
+                key: const Key('AIzaSyBwbN0fky_wzAi59JEqcGX4uYldNNzCgNk'),
+                initialCameraPosition: const CameraPosition(
+                  target: LatLng(43.5507158, -80.2510604),
+                  zoom: 15,
+                ),
+                markers: {
+                  const Marker(
+                    markerId: MarkerId("event_location"),
+                    position: LatLng(43.5507158, -80.2510604),
+                  )
+                },
+                onMapCreated: (GoogleMapController controller) {
+                  mapController = controller;
+                  print(mapController.mapId);
+                },
+                mapType: MapType.normal,
+                onTap: (coord) => print('tapped $coord'),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
-}
 
-class Details extends StatelessWidget {
-  const Details({
-    super.key,
-    required this.event,
-  });
-
-  final Event event;
-
-  @override
-  Widget build(BuildContext context) {
-    final provider = Provider.of<UpcomingEventsProvider>(context);
-
+  // Helper method to build event detail row
+  Widget _buildEventDetailRow(
+      BuildContext context, String label, String value) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Padding(
-          padding: EdgeInsets.all(8.0),
-          child: Text(
-            "Description:",
-            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-          ),
+        Text(
+          label,
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            event.description.join('\n'),
-            style: const TextStyle(fontSize: 18),
-          ),
+        const SizedBox(height: 4),
+        Text(
+          value,
+          style: Theme.of(context).textTheme.bodyLarge,
         ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            event.date,
-            style: const TextStyle(fontSize: 18),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            event.time,
-            style: const TextStyle(fontSize: 18),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            '${event.currentParticipants}/${event.totalParticipants}',
-            style: const TextStyle(fontSize: 18),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            event.location,
-            style: const TextStyle(fontSize: 18),
-          ),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: provider.isUpcomingEvent(event)
-              ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                      ElevatedButton(
-                          onPressed: null,
-                          style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 20,
-                                  horizontal: 40), // Increase button height
-                              textStyle: const TextStyle(fontSize: 26),
-                              backgroundColor: Colors.grey,
-                              foregroundColor:
-                                  Colors.white24 // Increase font size
-                              ),
-                          child: const Text('Join')),
-                      ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.redAccent[100],
-                            foregroundColor: Colors.black,
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 20,
-                                horizontal: 40), // Increase button height
-                            textStyle: const TextStyle(fontSize: 26),
-                          ),
-                          onPressed: () {
-                            event.removeParticipant();
-                            provider.removeFromList(event);
-                          },
-                          child: const Text('Leave'))
-                    ])
-              : ElevatedButton(
-                  onPressed: () {
-                    event.addParticipant();
-                    provider.addToList(event);
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 40), // Increase button height
-                    textStyle: const TextStyle(fontSize: 26),
-                    backgroundColor: Colors.cyan[900],
-                    foregroundColor: Colors.white, // Increase font size
-                  ),
-                  child: const Text('Join')),
-        )
-      ],
-    );
-  }
-}
-class MapScreen extends StatelessWidget {
-  const MapScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return 
-    FlutterMap(
-      options: MapOptions(
-      center: const LatLng(59.438484, 24.742595),
-      zoom: 14,
-      keepAlive: true
-  ),
-      children: [
-        TileLayer(
-          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-          subdomains: const ['a', 'b', 'c'],
-        ),
+        const SizedBox(height: 8),
       ],
     );
   }

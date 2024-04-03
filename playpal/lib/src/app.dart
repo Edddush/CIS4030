@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:playpal/providers/my_events_provider.dart';
 import 'package:playpal/providers/past_events_provider.dart';
-import 'event_feature/event_details_view.dart';
+import 'package:playpal/src/event_feature/event_details_view.dart';
 import 'event_feature/event_list_view.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';

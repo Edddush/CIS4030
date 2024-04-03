@@ -23,6 +23,9 @@ dependencies:
 
   intl: any
   flutter_gen: any
+  url_launcher: any
+  google_maps_flutter: ^2.6.0
+  flutter_ui_toolkit: ^0.0.3+9
 dev_dependencies:
   flutter_test:
     sdk: flutter
