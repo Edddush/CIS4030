@@ -41,7 +41,7 @@ class CreateEventState extends State<CreateEvent> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Event'),
-        backgroundColor: Colors.cyan[900],
+        backgroundColor: Colors.black54,
         foregroundColor: Colors.white,
       ),
       body: SingleChildScrollView(
@@ -54,7 +54,7 @@ class CreateEventState extends State<CreateEvent> {
               children: <Widget>[
                 TextFormField(
                   controller: nameController,
-                  decoration: const InputDecoration(labelText: 'Name'),
+                  decoration: const InputDecoration(labelText: 'Event Name'),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your name';

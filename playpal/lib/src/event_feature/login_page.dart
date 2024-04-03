@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'event_list_view.dart';
-import 'signup_page.dart'; 
+import 'signup_page.dart';
+import 'package:animated_text_kit/animated_text_kit.dart'; // Ensure this import is added for animations
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
   static const routeName = '/';
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -11,12 +14,9 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  
-  void _login() {
-    // Placeholder for login logic
-    // Here, you should include your authentication logic, for example, checking the username and password against your user.json data or a backend service.
 
-    // If login is successful, navigate to the EventListView
+  void _login() {
+    // Implement your login logic here
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(builder: (context) => const EventListView()),
@@ -27,26 +27,68 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Login'),
+        title: AnimatedTextKit(
+          animatedTexts: [
+            TypewriterAnimatedText(
+              'PlayPal',
+              textStyle: const TextStyle(
+                fontSize: 32.0,
+                fontWeight: FontWeight.bold,
+              ),
+              speed: const Duration(milliseconds: 200),
+            ),
+          ],
+          totalRepeatCount: 4,
+          pause: const Duration(milliseconds: 1000),
+          displayFullTextOnTap: true,
+          stopPauseOnTap: true,
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Text(
+              'Login',
+              style: TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 20),
             TextField(
               controller: _usernameController,
-              decoration: const InputDecoration(labelText: 'Username'),
+              decoration: InputDecoration(
+                labelText: 'Username',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+              ),
             ),
+            const SizedBox(height: 20),
             TextField(
               controller: _passwordController,
-              decoration: const InputDecoration(labelText: 'Password'),
               obscureText: true,
+              decoration: InputDecoration(
+                labelText: 'Password',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                ),
+              ),
             ),
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _login,
               child: const Text('Login'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.cyan[900],
+                foregroundColor: Colors.white,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                ),
+                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+              ),
             ),
             TextButton(
               onPressed: () {
