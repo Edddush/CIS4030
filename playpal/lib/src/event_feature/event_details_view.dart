@@ -182,7 +182,7 @@ class MapScreen extends StatelessWidget {
     return 
     FlutterMap(
       options: MapOptions(
-      center: LatLng(59.438484, 24.742595),
+      center: const LatLng(59.438484, 24.742595),
       zoom: 14,
       keepAlive: true
   ),

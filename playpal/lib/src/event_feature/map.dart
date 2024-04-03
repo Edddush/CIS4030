@@ -13,8 +13,8 @@ class MapScreen extends StatelessWidget {
       body: Stack(
         children: [
           FlutterMap(
-            options: const MapOptions(
-              center: LatLng(51.509364, -0.128928),
+            options: MapOptions(
+              center: const LatLng(51.509364, -0.128928),
               zoom: 3.2,
             ),
             children: [

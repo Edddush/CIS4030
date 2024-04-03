@@ -61,7 +61,15 @@ class MyApp extends StatelessWidget {
           // Define a light and dark color theme. Then, read the user's
           // preferred ThemeMode (light, dark, or system default) from the
           // SettingsController to display the correct theme.
-          theme: ThemeData(),
+          theme: ThemeData(
+              fontFamily: 'HelveticaNeue', // Use a clear sans-serif font
+              textTheme: const TextTheme(
+                // Adjust text sizes for optimal readability on iPhones
+                // Consider using at least 16-18sp for body text
+                titleLarge: TextStyle(fontSize: 20.0),
+                bodyLarge: TextStyle(fontSize: 18.0),
+                bodyMedium: TextStyle(fontSize: 16.0),
+              )),
           darkTheme: ThemeData.dark(),
           themeMode: settingsController.themeMode,
           home: const LoginPage(),
@@ -87,12 +95,10 @@ class MyApp extends StatelessWidget {
                   case EventListView.routeName:
                   default:
                     return const EventListView();
-                  
                 }
               },
             );
           },
-        )
-    );
+        ));
   }
 }

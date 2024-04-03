@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "143290992422",
+    "project_id": "playpal-78628",
+    "storage_bucket": "playpal-78628.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:143290992422:android:1458bb2b421d43c84ae3e7",
+        "android_client_info": {
+          "package_name": "com.example.playpal"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAr7rpNDA1DWD8Z0FnDf8nPUZAdMC0gNPE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
