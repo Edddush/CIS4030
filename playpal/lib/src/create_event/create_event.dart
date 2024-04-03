@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'dart:io';
+import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import '../event_feature/event.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:playpal/providers/my_events_provider.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as datatTimePicker;
@@ -18,6 +18,8 @@ class CreateEvent extends StatefulWidget {
 
 class CreateEventState extends State<CreateEvent> {
   final formKey = GlobalKey<FormState>();
+  final DatabaseReference _database = FirebaseDatabase.instance.ref();
+
   TextEditingController nameController = TextEditingController();
   String selectedSport = "Basketball";
   String selectedLocation = "Event Center";
@@ -28,8 +30,24 @@ class CreateEventState extends State<CreateEvent> {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController dressCodeController = TextEditingController();
   TextEditingController costController = TextEditingController();
-  List<String> sports = ['Basketball', 'Hockey', 'Pickleball', 'Soccer', 'Squash', 'Tennis', "Volleyball"];
-  List<String> locations = ['Event Center', 'Fieldhouse', 'Mitchell Gym', 'Small Gym', 'Squash Courts', 'Tennis Courts', "West Gym"];
+  List<String> sports = [
+    'Basketball',
+    'Hockey',
+    'Pickleball',
+    'Soccer',
+    'Squash',
+    'Tennis',
+    "Volleyball"
+  ];
+  List<String> locations = [
+    'Event Center',
+    'Fieldhouse',
+    'Mitchell Gym',
+    'Small Gym',
+    'Squash Courts',
+    'Tennis Courts',
+    "West Gym"
+  ];
   TextEditingController numberController = TextEditingController();
   TextEditingController disclaimerController = TextEditingController();
   TextEditingController equipmentController = TextEditingController();
@@ -91,9 +109,7 @@ class CreateEventState extends State<CreateEvent> {
                       labelText: 'Date',
                       hintText: 'Select Date',
                     ),
-                    child: Text(
-                      selectedDate.toString().substring(0, 10),
-                    ),
+                    child: Text(DateFormat('yyyy-MM-dd').format(selectedDate!)),
                   ),
                 ),
                 InkWell(
@@ -147,23 +163,18 @@ class CreateEventState extends State<CreateEvent> {
                 TextField(
                   controller: costController,
                   decoration: const InputDecoration(
-                    labelText: 'Cost',
-                    prefixIcon: Icon(Icons.attach_money)
-                  ),
+                      labelText: 'Cost', prefixIcon: Icon(Icons.attach_money)),
                   inputFormatters: [
                     FilteringTextInputFormatter.digitsOnly,
                   ],
                   keyboardType: TextInputType.number,
                   onChanged: (value) {
                     setState(() {
-                      if (value == "0"){
+                      if (value == "0") {
                         cost = "Free";
-                      }
-                      else{
+                      } else {
                         cost = "\$$value";
                       }
-                        
-
                     });
                   },
                 ),
@@ -208,30 +219,44 @@ class CreateEventState extends State<CreateEvent> {
                   child: Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        if (formKey.currentState != null && formKey.currentState!.validate()) {
-                          List<String> descriptionArray = [cost, equipmentController.text, disclaimerController.text, dressCodeController.text];
+                        if (formKey.currentState != null &&
+                            formKey.currentState!.validate()) {
+                          List<String> descriptionArray = [
+                            cost,
+                            equipmentController.text,
+                            disclaimerController.text,
+                            dressCodeController.text
+                          ];
                           Event event;
                           String thumbnail = "";
-                          if (selectedSport == "Basketball"){
-                            thumbnail = "https://cdn.pixabay.com/photo/2013/07/12/14/07/basketball-147794_960_720.png";
-                          }else if (selectedSport == "Soccer"){
-                            thumbnail = "https://cdn.pixabay.com/photo/2013/07/13/10/51/football-157930_960_720.png";
-                          }else if (selectedSport == "Tennis"){
-                            thumbnail = "https://cdn.pixabay.com/photo/2017/01/31/15/31/tennis-2025095_960_720.png";
-                          }else if (selectedSport == "Hockey"){
-                            thumbnail = "https://media.istockphoto.com/id/1464504444/photo/ice-hockey-players-on-the-grand-ice-arena-stadium.jpg?s=612x612&w=0&k=20&c=EQThnou2nV5mScmdWyMXbxo2B03zD3ACy9rnfMs_JPI=";
-                          }else if (selectedSport == "Squash"){
-                            thumbnail = "https://media.istockphoto.com/id/1400118233/photo/closeup-of-unknown-athletic-squash-player-using-a-racket-to-hit-a-ball-during-a-court-game.webp?s=1024x1024&w=is&k=20&c=pGYz9x6TXj2EZYNFDvBTjEjCZKXgv2-HlexIFnLEHZ4=";
-                          }else if (selectedSport == "Volleyball"){
-                            thumbnail = "https://media.istockphoto.com/id/618341990/photo/volleyball-ball-isolated-on-white-background.jpg?b=1&s=612x612&w=0&k=20&c=F8CwbWG-uGZbWc4ry0nA3iZZAXBKX7hVsjU5fI53QTQ=";
-                          }else if (selectedSport == "PickelBall"){
-                            thumbnail = "https://images.pexels.com/photos/17299534/pexels-photo-17299534/free-photo-of-pickleball-paddle-ball-court-net.jpeg?auto=compress&cs=tinysrgb&w=600";
+                          if (selectedSport == "Basketball") {
+                            thumbnail =
+                                "https://cdn.pixabay.com/photo/2013/07/12/14/07/basketball-147794_960_720.png";
+                          } else if (selectedSport == "Soccer") {
+                            thumbnail =
+                                "https://cdn.pixabay.com/photo/2013/07/13/10/51/football-157930_960_720.png";
+                          } else if (selectedSport == "Tennis") {
+                            thumbnail =
+                                "https://cdn.pixabay.com/photo/2017/01/31/15/31/tennis-2025095_960_720.png";
+                          } else if (selectedSport == "Hockey") {
+                            thumbnail =
+                                "https://media.istockphoto.com/id/1464504444/photo/ice-hockey-players-on-the-grand-ice-arena-stadium.jpg?s=612x612&w=0&k=20&c=EQThnou2nV5mScmdWyMXbxo2B03zD3ACy9rnfMs_JPI=";
+                          } else if (selectedSport == "Squash") {
+                            thumbnail =
+                                "https://media.istockphoto.com/id/1400118233/photo/closeup-of-unknown-athletic-squash-player-using-a-racket-to-hit-a-ball-during-a-court-game.webp?s=1024x1024&w=is&k=20&c=pGYz9x6TXj2EZYNFDvBTjEjCZKXgv2-HlexIFnLEHZ4=";
+                          } else if (selectedSport == "Volleyball") {
+                            thumbnail =
+                                "https://media.istockphoto.com/id/618341990/photo/volleyball-ball-isolated-on-white-background.jpg?b=1&s=612x612&w=0&k=20&c=F8CwbWG-uGZbWc4ry0nA3iZZAXBKX7hVsjU5fI53QTQ=";
+                          } else if (selectedSport == "PickelBall") {
+                            thumbnail =
+                                "https://images.pexels.com/photos/17299534/pexels-photo-17299534/free-photo-of-pickleball-paddle-ball-court-net.jpeg?auto=compress&cs=tinysrgb&w=600";
                           }
                           Map<String, dynamic> eventData = {
                             'name': nameController.text,
                             'sport': selectedSport,
                             'location': selectedLocation,
-                            'date': selectedDate.toString().substring(0, 10),
+                            'date':
+                                DateFormat('yyyy-MM-dd').format(selectedDate!),
                             'time': startTime.format(context),
                             'total_participants': maxNumParticipants,
                             'current_participants': 0,
@@ -243,7 +268,8 @@ class CreateEventState extends State<CreateEvent> {
                             name: nameController.text,
                             sport: selectedSport,
                             location: selectedLocation,
-                            date: selectedDate.toString().substring(0, 10),
+                            date:
+                                DateFormat('yyyy-MM-dd').format(selectedDate!),
                             time: startTime.format(context),
                             totalParticipants: maxNumParticipants,
                             currentParticipants: 0,
@@ -251,7 +277,7 @@ class CreateEventState extends State<CreateEvent> {
                             description: descriptionArray,
                             isPast: false,
                           );
-                          appendToJson(eventData);
+                          appendToJson(event);
                           Navigator.pop(context);
                           provider.addToList(event);
                         }
@@ -277,15 +303,12 @@ class CreateEventState extends State<CreateEvent> {
     );
   }
 
-  Future<void> appendToJson(Map<String, dynamic> newEvent) async {
-    File file = File(
-        '/assets/event_list.json');
-    String jsonString = await file.readAsString();
-    Map<String, dynamic> jsonData = json.decode(jsonString);
-    List<dynamic> existingEvents = jsonData['events'];
-    existingEvents.add(newEvent);
-    await file
-        .writeAsString(const JsonEncoder.withIndent('  ').convert(jsonData));
+  Future<void> appendToJson(Event newEvent) async {
+    try {
+      await _database.child('events').push().set(newEvent.toMap());
+    } catch (error) {
+      rethrow;
+    }
   }
 
   void showDatePicker(BuildContext context) {

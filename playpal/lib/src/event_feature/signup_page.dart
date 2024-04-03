@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'event_list_view.dart'; // Import your EventListView page
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
-  as datatTimePicker;
+    as datatTimePicker;
+import 'package:intl/intl.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -20,10 +21,10 @@ class _SignUpPageState extends State<SignUpPage> {
 
   void _signUp() {
     Map<String, dynamic> userData = {
-     'username': usernameController.text,
-     'email': emailController.text,
-    'password': passwordController.text,
-     'dob': selectedDate.toString().substring(0, 10)
+      'username': usernameController.text,
+      'email': emailController.text,
+      'password': passwordController.text,
+      'dob': DateFormat('yyyy-MM-dd').format(selectedDate!)
     };
     Navigator.pushReplacement(
       context,
@@ -43,98 +44,97 @@ class _SignUpPageState extends State<SignUpPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             TextFormField(
-                controller: emailController,
-                decoration: const InputDecoration(
+              controller: emailController,
+              decoration: const InputDecoration(
                 labelText: 'Email',
               ),
-                validator: (value) {
+              validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter your email';
                 }
                 return null;
-               },
+              },
             ),
             TextFormField(
-                controller: usernameController,
-                decoration: const InputDecoration(
+              controller: usernameController,
+              decoration: const InputDecoration(
                 labelText: 'Username',
               ),
-                validator: (value) {
+              validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter a unique username';
                 }
                 return null;
-               },
+              },
             ),
             TextFormField(
-                controller: passwordController,
-                decoration: const InputDecoration(
+              controller: passwordController,
+              decoration: const InputDecoration(
                 labelText: 'Password',
               ),
-                validator: (value) {
+              validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter the password.';
-                }
-                else if(value != password2Controller.text){
+                } else if (value != password2Controller.text) {
                   return 'Passwords do not match';
                 }
                 return null;
-               },
+              },
             ),
             TextFormField(
-                controller: password2Controller,
-                decoration: const InputDecoration(
+              controller: password2Controller,
+              decoration: const InputDecoration(
                 labelText: 'Re-enter Password',
               ),
-                validator: (value) {
+              validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please re-enter the password.';
-                }
-                else if(value != passwordController.text){
+                } else if (value != passwordController.text) {
                   return 'Passwords do not match';
                 }
                 return null;
-               },
+              },
             ),
             InkWell(
-                  onTap: () {
-                    showDatePicker(context);
+              onTap: () {
+                showDatePicker(context);
+              },
+              child: InputDecorator(
+                decoration: const InputDecoration(
+                  labelText: 'Date of birth',
+                  hintText: 'Select Date',
+                ),
+                child: Text(
+                  DateFormat('yyyy-MM-dd').format(selectedDate!),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 32.0),
+              child: Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    _signUp();
                   },
-                  child: InputDecorator(
-                    decoration: const InputDecoration(
-                      labelText: 'Date of birth',
-                      hintText: 'Select Date',
-                    ),
-                    child: Text(
-                      selectedDate.toString().substring(0, 10),
-                    ),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(200, 50),
+                    padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                    backgroundColor: Colors.cyan[900],
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Text(
+                    'Sign Up',
+                    style: TextStyle(fontSize: 20),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 32.0),
-                  child: Center(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        _signUp();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(200, 50),
-                        padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                        backgroundColor: Colors.cyan[900],
-                        foregroundColor: Colors.white,
-                      ),
-                      child: const Text(
-                        'Sign Up',
-                        style: TextStyle(fontSize: 20),
-                      ),
-                    ),
-                  ),
-                ),
+              ),
+            ),
           ],
         ),
       ),
     );
   }
+
   void showDatePicker(BuildContext context) {
     datatTimePicker.DatePicker.showDatePicker(
       context,

@@ -1,26 +1,10 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
+import 'package:playpal/src/create_event/create_event.dart';
 import 'package:playpal/src/event_feature/event_details_view.dart';
 import 'event.dart';
 import 'dart:async';
 import 'package:playpal/src/event_feature/hamburger_menu.dart';
 import 'package:firebase_database/firebase_database.dart';
-
-
-// Future<List<Event>> fetchEventsFromFile() async {
-//   return compute(parseEvents, response);
-// }
-
-// // A function that converts a response body into a List<Event>.
-// List<Event> parseEvents(String responseBody) {
-//   final parsed =
-//       (jsonDecode(responseBody)["events"] as List).cast<Map<String, dynamic>>();
-//   return parsed.map<Event>((json) => Event.fromJson(json)).toList();
-// }
-
-
 
 /// Displays a list of events.
 class EventListView extends StatelessWidget {
@@ -51,7 +35,12 @@ class EventListView extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.restorablePushNamed(
+            context,
+            CreateEvent.routeName,
+          );
+        },
         foregroundColor: Colors.white,
         backgroundColor: const Color.fromARGB(255, 8, 98, 54),
         shape: const CircleBorder(),
@@ -66,13 +55,12 @@ class EventListView extends StatelessWidget {
       List<Event> eventList = [];
 
       if (event.snapshot.value != null) {
-        final jsonData = List<Map>.from(event.snapshot.value as List<Object?>);
-        eventList = jsonData.map<Event>((json) => Event.fromJson(json)).toList();
+        final jsonData = Map<String, dynamic>.from(event.snapshot.value as Map);
+        jsonData.forEach((key, value) { eventList.add(Event.fromJson(value));});
       }
-      
+
       return eventList;
     } catch (error) {
-      print(error);
       rethrow;
     }
   }
