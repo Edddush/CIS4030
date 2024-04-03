@@ -123,7 +123,7 @@ class Details extends StatelessWidget {
             style: const TextStyle(fontSize: 18),
           ),
         ),
-        MapScreen(),
+        const MapScreen(),
         Align(
           alignment: Alignment.bottomCenter,
           child: provider.isUpcomingEvent(event)
@@ -176,12 +176,14 @@ class Details extends StatelessWidget {
   }
 }
 class MapScreen extends StatelessWidget {
+  const MapScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         FlutterMap(
-          options: MapOptions(
+          options: const MapOptions(
             initialCenter: LatLng(51, 50),
             initialZoom: 3,
           ),

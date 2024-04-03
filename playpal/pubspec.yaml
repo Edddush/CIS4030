@@ -19,6 +19,8 @@ dependencies:
   flutter_map: ^6.1.0
   latlong2: ^0.9.0
 
+  intl: any
+  flutter_gen: any
 dev_dependencies:
   flutter_test:
     sdk: flutter

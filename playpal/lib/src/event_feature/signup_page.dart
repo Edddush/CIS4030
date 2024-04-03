@@ -118,8 +118,8 @@ class _SignUpPageState extends State<SignUpPage> {
                         _signUp();
                       },
                       style: ElevatedButton.styleFrom(
-                        minimumSize: Size(200, 50),
-                        padding: EdgeInsets.symmetric(horizontal: 32.0),
+                        minimumSize: const Size(200, 50),
+                        padding: const EdgeInsets.symmetric(horizontal: 32.0),
                         backgroundColor: Colors.cyan[900],
                         foregroundColor: Colors.white,
                       ),

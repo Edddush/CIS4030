@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'event_list_view.dart';
 import 'signup_page.dart'; 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
   static const routeName = '/';
   @override
   _LoginPageState createState() => _LoginPageState();

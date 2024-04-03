@@ -8,7 +8,6 @@ import 'event_details_view.dart';
 import 'package:playpal/src/event_feature/hamburger_menu.dart';
 import 'package:playpal/src/create_event/create_event.dart';
 
-
 Future<List<Event>> fetchEventsFromFile() async {
   // Read the JSON data from the file
   final String response = await rootBundle.loadString('assets/event_list.json');
@@ -22,43 +21,61 @@ List<Event> parseEvents(String responseBody) {
   return parsed.map<Event>((json) => Event.fromJson(json)).toList();
 }
 
-/// Displays a list of SampleItems.
-class EventListView extends StatelessWidget {
+class EventListView extends StatefulWidget {
   const EventListView({super.key});
   static const routeName = '/events';
 
   @override
+  State<EventListView> createState() =>
+      _EventListView();
+}
+
+
+/// Displays a list of SampleItems.
+class _EventListView extends State<EventListView> {
+
+  static const List<(Color?, Color? background, ShapeBorder?)> customizations =
+      <(Color?, Color?, ShapeBorder?)>[
+    (null, null, null),
+    (null, Colors.green, null),
+    (Colors.white, Colors.green, null),
+    (Colors.white, Colors.green, CircleBorder()),
+  ];
+  
+  int index = 0; 
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: const NavBar(),
-        appBar: AppBar(
-          title: const Text('Events'),
-          backgroundColor: Colors.black54,
-          foregroundColor: Colors.white,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.add, color:Colors.white, size: 40),
-              onPressed: () {
-                Navigator.restorablePushNamed(
-                  context,
-                  CreateEvent.routeName,
-                );
-              },
-            ),
-          ],
-        ),
-        body: FutureBuilder<List<Event>>(
-            future: fetchEventsFromFile(),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                print(snapshot);
-                return const Center(child: Text('An error occurred!'));
-              } else if (snapshot.hasData) {
-                return EventList(events: snapshot.data!);
-              } else {
-                return const Center(child: CircularProgressIndicator());
-              }
-            }));
+      drawer: const NavBar(),
+      appBar: AppBar(
+        title: const Text('Events'),
+        backgroundColor: Colors.black54,
+        foregroundColor: Colors.white,
+      ),
+      body: FutureBuilder<List<Event>>(
+          future: fetchEventsFromFile(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return const Center(child: Text('An error occurred!'));
+            } else if (snapshot.hasData) {
+              return EventList(events: snapshot.data!);
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          }),
+floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          setState(() {
+            index = (index + 1) % customizations.length;
+          });
+        },
+        foregroundColor: customizations[index].$1,
+        backgroundColor: customizations[index].$2,
+        shape: customizations[index].$3,
+        child: const Icon(Icons.navigation),
+      ),
+    );
   }
 }
 
@@ -97,8 +114,7 @@ class EventList extends StatelessWidget {
             ),
             onTap: () {
               Navigator.restorablePushNamed(context, EventDetailsView.routeName,
-                  arguments: event.toMap()
-              );
+                  arguments: event.toMap());
             },
           ),
         );

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:playpal/src/event_feature/login_page.dart';
-import 'package:playpal/src/user_feature/user_profile.dart';
 import 'package:playpal/src/event_feature/event_list_view.dart';
 import 'package:playpal/src/settings/settings_view.dart';
 import 'package:playpal/src/user_feature/user_events/past_events_view.dart';
@@ -23,7 +22,7 @@ class NavBar extends StatelessWidget{
           ),
           ListTile(
             leading: const Icon(Icons.list),
-            title: const Text('Events'),
+            title: const Text('All Events'),
             onTap: () => {
               Navigator.restorablePushNamed(
                   context,
@@ -62,16 +61,6 @@ class NavBar extends StatelessWidget{
           ),
           const Divider(),
           ListTile(
-            leading: const Icon(Icons.person),
-            title: const Text('User Profile'),
-            onTap: () => {
-              Navigator.restorablePushNamed(
-              context,
-              UserProfile.routeName)
-            },
-          ),
-          const Divider(),
-          ListTile(
             leading: const Icon(Icons.settings),
             title: const Text('Settings'),
             onTap: () => {
@@ -81,6 +70,7 @@ class NavBar extends StatelessWidget{
             },
           ),
           const Divider(),
+          const SizedBox(height: 32),
           ListTile(
             leading: const Icon(Icons.logout),
             title: const Text('Log Out'),
