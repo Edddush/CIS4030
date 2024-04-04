@@ -31,7 +31,6 @@ class UpcomingEventsView extends StatelessWidget {
               title: Text(event.name),
               subtitle: Text(event.sport),
               leading: CircleAvatar(
-                // Display the Flutter Logo image asset.
                 foregroundImage: NetworkImage(event.thumbnail),
               ),
               onTap: () {

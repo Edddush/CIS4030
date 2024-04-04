@@ -19,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
     // Implement your login logic here
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const EventListView()),
+      MaterialPageRoute(builder: (context) => EventListView()),
     );
   }
 

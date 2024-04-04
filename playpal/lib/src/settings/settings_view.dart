@@ -5,6 +5,7 @@ import 'package:flutter/services.dart' show rootBundle;
 
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as date_time_picker;
+import 'package:intl/intl.dart';
 
 
 class UserSettings extends StatefulWidget {
@@ -135,7 +136,7 @@ void initState() {
                       hintText: 'Select Date',
                     ),
                     child: Text(
-                      dob.toString().substring(0, 10),
+                      DateFormat('yyyy-MM-dd').format(dob!)
                     ),
                   ),
                 ),

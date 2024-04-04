@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+<<<<<<< HEAD
 import 'event_list_view.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart' as dateTimePicker;
 import 'package:animated_text_kit/animated_text_kit.dart'; // Ensure this import is added for animations
+=======
+import 'event_list_view.dart'; // Import your EventListView page
+import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
+    as datatTimePicker;
+import 'package:intl/intl.dart';
+>>>>>>> d1edb5e5f292b15756a14bf431aea6ae5fd32476
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -18,10 +25,19 @@ class _SignUpPageState extends State<SignUpPage> {
   DateTime? selectedDate = DateTime.now();
 
   void _signUp() {
+<<<<<<< HEAD
     // Placeholder for your sign-up logic
+=======
+    Map<String, dynamic> userData = {
+      'username': usernameController.text,
+      'email': emailController.text,
+      'password': passwordController.text,
+      'dob': DateFormat('yyyy-MM-dd').format(selectedDate!)
+    };
+>>>>>>> d1edb5e5f292b15756a14bf431aea6ae5fd32476
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const EventListView()),
+      MaterialPageRoute(builder: (context) => EventListView()),
     );
   }
 
@@ -48,6 +64,7 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
+<<<<<<< HEAD
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -154,6 +171,98 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
             ],
           ),
+=======
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            TextFormField(
+              controller: emailController,
+              decoration: const InputDecoration(
+                labelText: 'Email',
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your email';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              controller: usernameController,
+              decoration: const InputDecoration(
+                labelText: 'Username',
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a unique username';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              controller: passwordController,
+              decoration: const InputDecoration(
+                labelText: 'Password',
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter the password.';
+                } else if (value != password2Controller.text) {
+                  return 'Passwords do not match';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              controller: password2Controller,
+              decoration: const InputDecoration(
+                labelText: 'Re-enter Password',
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please re-enter the password.';
+                } else if (value != passwordController.text) {
+                  return 'Passwords do not match';
+                }
+                return null;
+              },
+            ),
+            InkWell(
+              onTap: () {
+                showDatePicker(context);
+              },
+              child: InputDecorator(
+                decoration: const InputDecoration(
+                  labelText: 'Date of birth',
+                  hintText: 'Select Date',
+                ),
+                child: Text(
+                  DateFormat('yyyy-MM-dd').format(selectedDate!),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 32.0),
+              child: Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    _signUp();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: const Size(200, 50),
+                    padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                    backgroundColor: Colors.cyan[900],
+                    foregroundColor: Colors.white,
+                  ),
+                  child: const Text(
+                    'Sign Up',
+                    style: TextStyle(fontSize: 20),
+                  ),
+                ),
+              ),
+            ),
+          ],
+>>>>>>> d1edb5e5f292b15756a14bf431aea6ae5fd32476
         ),
       ),
     );

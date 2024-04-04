@@ -22,7 +22,7 @@ class Event {
   final List description;
   bool isPast;
 
-  factory Event.fromJson(Map<String, dynamic> json) {
+  factory Event.fromJson(Map<dynamic, dynamic> json) {
     return Event(
         name: json['name'] as String,
         sport: json['sport'] as String,
