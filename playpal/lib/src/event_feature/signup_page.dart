@@ -112,11 +112,28 @@ class _SignUpPageState extends State<SignUpPage> {
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                   child: Center(
+<<<<<<< HEAD
                     child: Text(
                       selectedDate != null
                           ? "Date of Birth: ${selectedDate!.year}-${selectedDate!.month.toString().padLeft(2, '0')}-${selectedDate!.day.toString().padLeft(2, '0')}"
                           : 'Select Date of Birth',
                       style: TextStyle(fontSize: 16),
+=======
+                    child: ElevatedButton(
+                      onPressed: () {
+                        _signUp();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(200, 50),
+                        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                        backgroundColor: Colors.cyan[900],
+                        foregroundColor: Colors.white,
+                      ),
+                      child: const Text(
+                        'Sign Up',
+                        style: TextStyle(fontSize: 20),
+                      ),
+>>>>>>> fd7d15e3f1d412bdd04f987ab8cf8a1c1335ddbb
                     ),
                   ),
                 ),

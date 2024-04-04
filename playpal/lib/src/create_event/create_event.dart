@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/services.dart';
-import '../event_feature/event_list_view.dart';
 import 'package:provider/provider.dart';
 import '../event_feature/event.dart';
 import 'package:playpal/providers/my_events_provider.dart';
@@ -161,7 +160,7 @@ class CreateEventState extends State<CreateEvent> {
                         cost = "Free";
                       }
                       else{
-                        cost = "\$" + value;
+                        cost = "\$$value";
                       }
                         
 
@@ -258,8 +257,8 @@ class CreateEventState extends State<CreateEvent> {
                         }
                       },
                       style: ElevatedButton.styleFrom(
-                        minimumSize: Size(200, 50),
-                        padding: EdgeInsets.symmetric(horizontal: 32.0),
+                        minimumSize: const Size(200, 50),
+                        padding: const EdgeInsets.symmetric(horizontal: 32.0),
                         backgroundColor: Colors.cyan[900],
                         foregroundColor: Colors.white,
                       ),

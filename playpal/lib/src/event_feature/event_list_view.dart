@@ -6,8 +6,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'event_details_view.dart';
 import 'package:playpal/src/event_feature/hamburger_menu.dart';
-import 'package:playpal/src/create_event/create_event.dart';
-
 
 Future<List<Event>> fetchEventsFromFile() async {
   // Read the JSON data from the file
@@ -30,35 +28,31 @@ class EventListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: const NavBar(),
-        appBar: AppBar(
-          title: const Text('Events'),
-          backgroundColor: Colors.black54,
-          foregroundColor: Colors.white,
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.add, color:Colors.white, size: 40),
-              onPressed: () {
-                Navigator.restorablePushNamed(
-                  context,
-                  CreateEvent.routeName,
-                );
-              },
-            ),
-          ],
-        ),
-        body: FutureBuilder<List<Event>>(
-            future: fetchEventsFromFile(),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                print(snapshot);
-                return const Center(child: Text('An error occurred!'));
-              } else if (snapshot.hasData) {
-                return EventList(events: snapshot.data!);
-              } else {
-                return const Center(child: CircularProgressIndicator());
-              }
-            }));
+      drawer: const NavBar(),
+      appBar: AppBar(
+        title: const Text('Events'),
+        backgroundColor: const Color.fromARGB(255, 8, 98, 54),
+        foregroundColor: Colors.white,
+      ),
+      body: FutureBuilder<List<Event>>(
+          future: fetchEventsFromFile(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return const Center(child: Text('An error occurred!'));
+            } else if (snapshot.hasData) {
+              return EventList(events: snapshot.data!);
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          }),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        foregroundColor: Colors.white,
+        backgroundColor: const Color.fromARGB(255, 8, 98, 54),
+        shape: const CircleBorder(),
+        child: const Icon(Icons.add),
+      ),
+    );
   }
 }
 
@@ -74,35 +68,60 @@ class EventList extends StatelessWidget {
       itemCount: events.length,
       itemBuilder: (context, index) {
         final event = events[index];
-        return Card(
-          // Wrap each ListTile with a Card for better UI
-          elevation: 4.0, // Optional: adds a shadow to each card
-          margin: const EdgeInsets.symmetric(
-              horizontal: 8.0,
-              vertical: 4.0), // Optional: adds margin around each card
-          child: ListTile(
-            title: Text(event.name),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(event.sport),
-                Text('Location: ${event.location}'),
-                Text('Date: ${event.date}, Time: ${event.time}'),
-                Text(
-                    'Participants: ${event.currentParticipants}/${event.totalParticipants}'),
-              ],
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+          child: Card(
+            elevation: 4.0, // Optional: adds a shadow to each card
+            child: ListTile(
+              title: Text(
+                event.name,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold, // Making name text bold
+                ),
+              ),
+              subtitle: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    event.sport,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w600, // Making sport text bold
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text('Location: ${event.location}'),
+                  const SizedBox(height: 4),
+                  Text('Date: ${event.date}, ${event.time}'),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Participants: ${event.currentParticipants}/${event.totalParticipants}',
+                  ),
+                ],
+              ),
+              leading: CircleAvatar(
+                foregroundImage: NetworkImage(event.thumbnail),
+              ),
+              onTap: () {
+                Navigator.restorablePushNamed(
+                  context,
+                  EventDetailsView.routeName,
+                  arguments: event.toMap(),
+                );
+              },
             ),
-            leading: CircleAvatar(
-              foregroundImage: NetworkImage(event.thumbnail),
-            ),
-            onTap: () {
-              Navigator.restorablePushNamed(context, EventDetailsView.routeName,
-                  arguments: event.toMap()
-              );
-            },
           ),
         );
       },
     );
   }
 }
+
+
+// import 'package:firebase_core/firebase_core.dart';
+// import 'firebase_options.dart';
+
+// // ...
+
+// await Firebase.initializeApp(
+//     options: DefaultFirebaseOptions.currentPlatform,
+// );

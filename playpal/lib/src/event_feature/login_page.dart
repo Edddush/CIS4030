@@ -4,7 +4,7 @@ import 'signup_page.dart';
 import 'package:animated_text_kit/animated_text_kit.dart'; // Ensure this import is added for animations
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
   static const routeName = '/';
 
   @override

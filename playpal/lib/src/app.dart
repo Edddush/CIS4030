@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:playpal/providers/my_events_provider.dart';
 import 'package:playpal/providers/past_events_provider.dart';
@@ -8,8 +7,6 @@ import 'event_feature/event_list_view.dart';
 import 'settings/settings_controller.dart';
 import 'settings/settings_view.dart';
 import 'create_event/create_event.dart';
-import 'user_feature/user_profile.dart';
-import 'settings/settings_view.dart';
 import 'event_feature/login_page.dart';
 import 'package:provider/provider.dart';
 import 'user_feature/user_events/past_events_view.dart';
@@ -53,7 +50,6 @@ class MyApp extends StatelessWidget {
           // allows descendant Widgets to display the correct translations
           // depending on the user's locale.
           localizationsDelegates: const [
-            AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
@@ -62,21 +58,21 @@ class MyApp extends StatelessWidget {
             Locale('en', ''), // English, no country code
           ],
 
-          // Use AppLocalizations to configure the correct application title
-          // depending on the user's locale.
-          //
-          // The appTitle is defined in .arb files found in the localization
-          // directory.
-          onGenerateTitle: (BuildContext context) =>
-              AppLocalizations.of(context)!.appTitle,
-
           // Define a light and dark color theme. Then, read the user's
           // preferred ThemeMode (light, dark, or system default) from the
           // SettingsController to display the correct theme.
-          theme: ThemeData(),
+          theme: ThemeData(
+              fontFamily: 'HelveticaNeue', // Use a clear sans-serif font
+              textTheme: const TextTheme(
+                // Adjust text sizes for optimal readability on iPhones
+                // Consider using at least 16-18sp for body text
+                titleLarge: TextStyle(fontSize: 20.0),
+                bodyLarge: TextStyle(fontSize: 18.0),
+                bodyMedium: TextStyle(fontSize: 16.0),
+              )),
           darkTheme: ThemeData.dark(),
           themeMode: settingsController.themeMode,
-          home: LoginPage(),
+          home: const LoginPage(),
           // Define a function to handle named routes in order to support
           // Flutter web url navigation and deep linking.
           onGenerateRoute: (RouteSettings routeSettings) {
@@ -85,15 +81,13 @@ class MyApp extends StatelessWidget {
               builder: (BuildContext context) {
                 switch (routeSettings.name) {
                   case UserSettings.routeName:
-                    return UserSettings();
+                    return const UserSettings();
                   case MyEventsView.routeName:
                     return const MyEventsView();
                   case UpcomingEventsView.routeName:
                     return const UpcomingEventsView();
                   case EventDetailsView.routeName:
                     return const EventDetailsView();
-                  case UserProfile.routeName:
-                    return const UserProfile();
                   case CreateEvent.routeName:
                     return const CreateEvent();
                   case PastEventsView.routeName:
@@ -101,12 +95,10 @@ class MyApp extends StatelessWidget {
                   case EventListView.routeName:
                   default:
                     return const EventListView();
-                  
                 }
               },
             );
           },
-        )
-    );
+        ));
   }
 }

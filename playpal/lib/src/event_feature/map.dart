@@ -5,6 +5,8 @@ import 'package:latlong2/latlong.dart';
 
 
 class MapScreen extends StatelessWidget {
+  const MapScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -12,7 +14,7 @@ class MapScreen extends StatelessWidget {
         children: [
           FlutterMap(
             options: MapOptions(
-              center: LatLng(51.509364, -0.128928),
+              center: const LatLng(51.509364, -0.128928),
               zoom: 3.2,
             ),
             children: [
