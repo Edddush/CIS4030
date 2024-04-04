@@ -7,11 +7,26 @@ import 'package:playpal/src/event_feature/hamburger_menu.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 /// Displays a list of events.
-class EventListView extends StatelessWidget {
-  EventListView({super.key});
+class EventListView extends StatefulWidget {
+  EventListView({Key? key});
 
   static const routeName = '/events';
   final DatabaseReference _database = FirebaseDatabase.instance.ref();
+
+  @override
+  _EventListViewState createState() => _EventListViewState();
+}
+
+class _EventListViewState extends State<EventListView> {
+  late Future<List<Event>> _eventsFuture;
+  TextEditingController _searchController = TextEditingController();
+  late List<Event> _allEvents;
+
+  @override
+  void initState() {
+    super.initState();
+    _eventsFuture = _loadJournalEntries();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,17 +37,37 @@ class EventListView extends StatelessWidget {
         backgroundColor: const Color.fromARGB(255, 8, 98, 54),
         foregroundColor: Colors.white,
       ),
-      body: FutureBuilder<List<Event>>(
-        future: _loadJournalEntries(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return const Center(child: Text('An error occurred!'));
-          } else if (snapshot.hasData) {
-            return EventList(events: snapshot.data!);
-          } else {
-            return const Center(child: CircularProgressIndicator());
-          }
-        },
+      body: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: TextField(
+              controller: _searchController,
+              decoration: InputDecoration(
+                labelText: 'Search',
+                hintText: 'Search events...',
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(),
+              ),
+              onChanged: _onSearchTextChanged,
+            ),
+          ),
+          Expanded(
+            child: FutureBuilder<List<Event>>(
+              future: _eventsFuture,
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return const Center(child: Text('An error occurred!'));
+                } else if (snapshot.hasData) {
+                  _allEvents = snapshot.data!;
+                  return _buildEventList(_searchController.text);
+                } else {
+                  return const Center(child: CircularProgressIndicator());
+                }
+              },
+            ),
+          ),
+        ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -49,14 +84,33 @@ class EventListView extends StatelessWidget {
     );
   }
 
+  Widget _buildEventList(String searchText) {
+    final List<Event> filteredEvents = _allEvents
+        .where((event) =>
+            event.name.toLowerCase().contains(searchText.toLowerCase()))
+        .toList();
+
+    if (filteredEvents.isEmpty) {
+      return Center(child: Text('No events found.'));
+    }
+
+    return EventList(events: filteredEvents);
+  }
+
+  void _onSearchTextChanged(String searchText) {
+    setState(() {});
+  }
+
   Future<List<Event>> _loadJournalEntries() async {
     try {
-      final DatabaseEvent event = await _database.child('events').once();
+      final DatabaseEvent event = await widget._database.child('events').once();
       List<Event> eventList = [];
 
       if (event.snapshot.value != null) {
         final jsonData = Map<String, dynamic>.from(event.snapshot.value as Map);
-        jsonData.forEach((key, value) { eventList.add(Event.fromJson(value));});
+        jsonData.forEach((key, value) {
+          eventList.add(Event.fromJson(value));
+        });
       }
 
       return eventList;
@@ -68,7 +122,7 @@ class EventListView extends StatelessWidget {
 
 /// Widget to display a list of events.
 class EventList extends StatelessWidget {
-  const EventList({super.key, required this.events});
+  const EventList({Key? key, required this.events});
 
   final List<Event> events;
 
@@ -90,7 +144,7 @@ class EventList extends StatelessWidget {
 
 /// Widget to display an individual event item.
 class EventListItem extends StatelessWidget {
-  const EventListItem({super.key, required this.event});
+  const EventListItem({Key? key, required this.event});
 
   final Event event;
 
@@ -159,14 +213,3 @@ class EventListItem extends StatelessWidget {
     );
   }
 }
-
-
-
-// import 'package:firebase_core/firebase_core.dart';
-// import 'firebase_options.dart';
-
-// // ...
-
-// await Firebase.initializeApp(
-//     options: DefaultFirebaseOptions.currentPlatform,
-// );
