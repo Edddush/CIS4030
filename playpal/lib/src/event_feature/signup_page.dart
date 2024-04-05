@@ -29,7 +29,7 @@ class _SignUpPageState extends State<SignUpPage> {
     };
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => const EventListView()),
+      MaterialPageRoute(builder: (context) => EventListView()),
     );
   }
 
