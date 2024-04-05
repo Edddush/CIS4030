@@ -11,21 +11,21 @@ class EventListView extends StatefulWidget {
   EventListView({Key? key});
 
   static const routeName = '/events';
-  final DatabaseReference _database = FirebaseDatabase.instance.ref();
+  final DatabaseReference database = FirebaseDatabase.instance.ref();
 
   @override
-  _EventListViewState createState() => _EventListViewState();
+  EventListViewState createState() => EventListViewState();
 }
 
-class _EventListViewState extends State<EventListView> {
-  late Future<List<Event>> _eventsFuture;
-  TextEditingController _searchController = TextEditingController();
-  late List<Event> _allEvents;
+class EventListViewState extends State<EventListView> {
+  late Future<List<Event>> eventsFuture;
+  TextEditingController searchController = TextEditingController();
+  late List<Event> allEvents;
 
   @override
   void initState() {
     super.initState();
-    _eventsFuture = _loadJournalEntries();
+    eventsFuture = loadJournalEntries();
   }
 
   @override
@@ -42,25 +42,25 @@ class _EventListViewState extends State<EventListView> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
-              controller: _searchController,
+              controller: searchController,
               decoration: InputDecoration(
                 labelText: 'Search',
                 hintText: 'Search events...',
                 prefixIcon: Icon(Icons.search),
                 border: OutlineInputBorder(),
               ),
-              onChanged: _onSearchTextChanged,
+              onChanged: onSearchTextChanged,
             ),
           ),
           Expanded(
             child: FutureBuilder<List<Event>>(
-              future: _eventsFuture,
+              future: eventsFuture,
               builder: (context, snapshot) {
                 if (snapshot.hasError) {
                   return const Center(child: Text('An error occurred!'));
                 } else if (snapshot.hasData) {
-                  _allEvents = snapshot.data!;
-                  return _buildEventList(_searchController.text);
+                  allEvents = snapshot.data!;
+                  return buildEventList(searchController.text);
                 } else {
                   return const Center(child: CircularProgressIndicator());
                 }
@@ -84,10 +84,10 @@ class _EventListViewState extends State<EventListView> {
     );
   }
 
-  Widget _buildEventList(String searchText) {
-    final List<Event> filteredEvents = _allEvents
+  Widget buildEventList(String searchText) {
+    final List<Event> filteredEvents = allEvents
         .where((event) =>
-            event.name.toLowerCase().contains(searchText.toLowerCase()))
+            event.sport.toLowerCase().contains(searchText.toLowerCase()))
         .toList();
 
     if (filteredEvents.isEmpty) {
@@ -97,13 +97,13 @@ class _EventListViewState extends State<EventListView> {
     return EventList(events: filteredEvents);
   }
 
-  void _onSearchTextChanged(String searchText) {
+  void onSearchTextChanged(String searchText) {
     setState(() {});
   }
 
-  Future<List<Event>> _loadJournalEntries() async {
+  Future<List<Event>> loadJournalEntries() async {
     try {
-      final DatabaseEvent event = await widget._database.child('events').once();
+      final DatabaseEvent event = await widget.database.child('events').once();
       List<Event> eventList = [];
 
       if (event.snapshot.value != null) {
@@ -142,7 +142,6 @@ class EventList extends StatelessWidget {
   }
 }
 
-/// Widget to display an individual event item.
 class EventListItem extends StatelessWidget {
   const EventListItem({Key? key, required this.event});
 
