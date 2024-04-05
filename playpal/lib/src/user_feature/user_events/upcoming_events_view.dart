@@ -11,11 +11,12 @@ class UpcomingEventsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<UpcomingEventsProvider>(context);
-    final List<Event> events = provider.events;
+    final List<EventObject> eventObjects = provider.events;
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.black54,
+        backgroundColor: const Color.fromARGB(255, 8, 98, 54),
+        foregroundColor: Colors.white,
         title: const Text('My Upcoming Events'),
       ),
       body: ListView.builder(
@@ -23,20 +24,20 @@ class UpcomingEventsView extends StatelessWidget {
         // scroll position when a user leaves and returns to the app after it
         // has been killed while running in the background.
         restorationId: 'My Upcoming Events',
-        itemCount: events.length,
+        itemCount: eventObjects.length,
         itemBuilder: (BuildContext context, int index) {
-          final event = events[index];
+          final eventObject = eventObjects[index];
 
           return ListTile(
-              title: Text(event.name),
-              subtitle: Text(event.sport),
+              title: Text(eventObject.event!.name),
+              subtitle: Text(eventObject.event!.sport),
               leading: CircleAvatar(
-                foregroundImage: NetworkImage(event.thumbnail),
+                foregroundImage: NetworkImage(eventObject.event!.thumbnail),
               ),
               onTap: () {
                 Navigator.restorablePushNamed(
                     context, EventDetailsView.routeName,
-                    arguments: event.toMap());
+                    arguments: eventObject.event!.toMap());
               });
         },
       ),

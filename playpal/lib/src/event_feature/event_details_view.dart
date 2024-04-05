@@ -1,26 +1,120 @@
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'event.dart';
 import 'package:playpal/providers/upcoming_events_provider.dart';
+// import 'package:firebase_database/firebase_database.dart';
 import 'package:provider/provider.dart';
 
-class EventDetailsView extends StatelessWidget {
+class EventDetailsView extends StatefulWidget {
   const EventDetailsView({super.key});
   static const routeName = '/event_details';
 
   @override
-  Widget build(BuildContext context) {
-    GoogleMapController mapController;
+  State<EventDetailsView> createState() => _EventDetailsViewState();
+}
 
-    final Map<String, dynamic> argument =
-        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
-    final Event event = Event.fromJson(argument);
+class _EventDetailsViewState extends State<EventDetailsView> {
+  final DatabaseReference _database = FirebaseDatabase.instance.ref();
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  int addParticipant(Event event) {
+    if (event.totalParticipants > event.currentParticipants) {
+      event.currentParticipants++;
+    }
+    return event.currentParticipants;
+  }
+
+  int removeParticipant(Event event) {
+    if (event.currentParticipants > 0) {
+      event.currentParticipants--;
+    }
+    return event.currentParticipants;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final EventObject argument =
+        ModalRoute.of(context)!.settings.arguments as EventObject;
+
+    final Event event = Event.fromJson(argument.event!.toMap());
+
     final provider = Provider.of<UpcomingEventsProvider>(context);
-    final String participantCount = '${event.currentParticipants}/${event.totalParticipants}';
+    Future<void> appendToJson(EventObject? eventObject) async {
+      try {
+        await _database
+            .child('upcoming_events')
+            .push()
+            .set(eventObject!.event!.toMap())
+            .then((value) {
+          provider.addToList(eventObject);
+          setState(() {});
+        });
+      } catch (error) {
+        rethrow;
+      }
+    }
+
+    Future<void> removeFromJson(EventObject? eventObject) async {
+      try {
+        await _database
+            .child('upcoming_events')
+            .child(eventObject!.key!)
+            .remove()
+            .then((value) {
+          provider.removeFromList(eventObject);
+          setState(() {});
+        });
+      } catch (error) {
+        rethrow;
+      }
+    }
+
+    void joinParticipationUpdate({EventObject? eventObject}) {
+      String key = eventObject!.key!;
+      Event event = eventObject.event!;
+      int value = addParticipant(event);
+
+      _database
+          .child("events")
+          .child(key)
+          .update({"current_participants": value}).then((value) {
+        appendToJson(eventObject);
+      });
+    }
+
+    void leaveParticipationUpdate({EventObject? eventObject}) {
+      String key = eventObject!.key!;
+      Event event = eventObject.event!;
+      int value = removeParticipant(event);
+
+      _database
+          .child("events")
+          .child(key)
+          .update({"current_participants": value}).then((value) {
+        removeFromJson(eventObject);
+      });
+    }
+
+    final String participantCount =
+        '${event.currentParticipants}/${event.totalParticipants}';
+
+    GoogleMapController mapController;
 
     return Scaffold(
       appBar: AppBar(
         title: const Text('Event Details'),
+        backgroundColor: const Color.fromARGB(255, 8, 98, 54),
+        foregroundColor: Colors.white
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -28,7 +122,7 @@ class EventDetailsView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Event Image
-            Image.network(event.thumbnail),
+            Hero(tag: 'sportImage', child: Image.network(event.thumbnail)),
             const SizedBox(height: 16),
             // Event Name
             Text(
@@ -43,10 +137,7 @@ class EventDetailsView extends StatelessWidget {
             _buildEventDetailRow(context, 'Location', event.location),
             _buildEventDetailRow(context, 'Date', event.date),
             _buildEventDetailRow(context, 'Time', event.time),
-            _buildEventDetailRow(
-              context,
-              'Participants', participantCount
-            ),
+            _buildEventDetailRow(context, 'Participants', participantCount),
             const Divider(),
             const Text(
               'Description:',
@@ -59,11 +150,10 @@ class EventDetailsView extends StatelessWidget {
             Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: provider.isUpcomingEvent(event)
+              child: provider.isUpcomingEvent(argument)
                   ? ElevatedButton(
                       onPressed: () {
-                        event.removeParticipant();
-                        provider.removeFromList(event);
+                        leaveParticipationUpdate(eventObject: argument);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.red,
@@ -76,8 +166,7 @@ class EventDetailsView extends StatelessWidget {
                     )
                   : ElevatedButton(
                       onPressed: () {
-                        event.addParticipant();
-                        provider.addToList(event);
+                        joinParticipationUpdate(eventObject: argument);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,
@@ -118,7 +207,6 @@ class EventDetailsView extends StatelessWidget {
                 },
                 onMapCreated: (GoogleMapController controller) {
                   mapController = controller;
-                  print(mapController.mapId);
                 },
                 mapType: MapType.normal,
                 onTap: (coord) => print('tapped $coord'),

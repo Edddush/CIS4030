@@ -14,7 +14,9 @@ class MyEventsView extends StatelessWidget {
     final List<Event> events = provider.events;
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.black54, title: const Text('My Events')),
+          backgroundColor: const Color.fromARGB(255, 8, 98, 54),
+          foregroundColor: Colors.white,
+          title: const Text('My Events')),
       body: ListView.builder(
         // Providing a restorationId allows the ListView to restore the
         // scroll position when a user leaves and returns to the app after it
@@ -28,9 +30,10 @@ class MyEventsView extends StatelessWidget {
               title: Text(event.name),
               subtitle: Text(event.sport),
               leading: CircleAvatar(
-                // Display the Flutter Logo image asset.
-                foregroundImage: NetworkImage(event.thumbnail),
-              ),
+                  child: Hero(
+                tag: 'sportImage',
+                child: Image.network(event.thumbnail),
+              )),
               onTap: () {
                 Navigator.restorablePushNamed(
                     context, EventDetailsView.routeName,

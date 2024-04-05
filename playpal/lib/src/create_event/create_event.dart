@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
+import 'package:playpal/src/user_feature/user_events/my_events_view.dart';
 import 'package:provider/provider.dart';
 import '../event_feature/event.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -55,6 +56,20 @@ class CreateEventState extends State<CreateEvent> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<MyEventsProvider>(context);
+    Future<void> appendToJson(Event event) async {
+      try {
+        await _database
+            .child('my_events')
+            .push()
+            .set(event.toMap())
+            .then((value) {
+          provider.addToList(event);
+        });
+      } catch (error) {
+        rethrow;
+      }
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Event'),
@@ -227,7 +242,7 @@ class CreateEventState extends State<CreateEvent> {
                             disclaimerController.text,
                             dressCodeController.text
                           ];
-                          Event event;
+                          Event newEvent;
                           String thumbnail = "";
                           if (selectedSport == "Basketball") {
                             thumbnail =
@@ -243,7 +258,7 @@ class CreateEventState extends State<CreateEvent> {
                                 "https://media.istockphoto.com/id/1464504444/photo/ice-hockey-players-on-the-grand-ice-arena-stadium.jpg?s=612x612&w=0&k=20&c=EQThnou2nV5mScmdWyMXbxo2B03zD3ACy9rnfMs_JPI=";
                           } else if (selectedSport == "Squash") {
                             thumbnail =
-                                "https://media.istockphoto.com/id/1400118233/photo/closeup-of-unknown-athletic-squash-player-using-a-racket-to-hit-a-ball-during-a-court-game.webp?s=1024x1024&w=is&k=20&c=pGYz9x6TXj2EZYNFDvBTjEjCZKXgv2-HlexIFnLEHZ4=";
+                                "https://images.pexels.com/photos/209977/pexels-photo-209977.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1";
                           } else if (selectedSport == "Volleyball") {
                             thumbnail =
                                 "https://media.istockphoto.com/id/618341990/photo/volleyball-ball-isolated-on-white-background.jpg?b=1&s=612x612&w=0&k=20&c=F8CwbWG-uGZbWc4ry0nA3iZZAXBKX7hVsjU5fI53QTQ=";
@@ -251,20 +266,8 @@ class CreateEventState extends State<CreateEvent> {
                             thumbnail =
                                 "https://images.pexels.com/photos/17299534/pexels-photo-17299534/free-photo-of-pickleball-paddle-ball-court-net.jpeg?auto=compress&cs=tinysrgb&w=600";
                           }
-                          Map<String, dynamic> eventData = {
-                            'name': nameController.text,
-                            'sport': selectedSport,
-                            'location': selectedLocation,
-                            'date':
-                                DateFormat('yyyy-MM-dd').format(selectedDate!),
-                            'time': startTime.format(context),
-                            'total_participants': maxNumParticipants,
-                            'current_participants': 0,
-                            'thumbnail': thumbnail,
-                            'description': descriptionArray,
-                            "is_past": false
-                          };
-                          event = Event(
+
+                          newEvent = Event(
                             name: nameController.text,
                             sport: selectedSport,
                             location: selectedLocation,
@@ -277,9 +280,8 @@ class CreateEventState extends State<CreateEvent> {
                             description: descriptionArray,
                             isPast: false,
                           );
-                          appendToJson(event);
-                          Navigator.pop(context);
-                          provider.addToList(event);
+                          appendToJson(newEvent);
+                          Navigator.pushNamed(context, MyEventsView.routeName);
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -301,14 +303,6 @@ class CreateEventState extends State<CreateEvent> {
         ),
       ),
     );
-  }
-
-  Future<void> appendToJson(Event newEvent) async {
-    try {
-      await _database.child('events').push().set(newEvent.toMap());
-    } catch (error) {
-      rethrow;
-    }
   }
 
   void showDatePicker(BuildContext context) {

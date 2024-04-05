@@ -1,4 +1,25 @@
-class Event {
+import 'package:flutter/material.dart';
+
+class EventObject{
+  String? key;
+  Event? event;
+
+  EventObject({this.key, this.event});
+
+  @override
+  bool operator == (Object other) {
+    if (identical(this, other)) return true;
+
+    return other is EventObject &&
+        other.key == key &&
+        other.event == event;
+  }
+
+  @override
+  int get hashCode => Object.hash(key, event);
+} 
+
+class Event extends ChangeNotifier{
   Event(
       {required this.name,
       required this.sport,
@@ -53,18 +74,6 @@ class Event {
 
   Future<void> updateExpirationStatus() async {
     isPast = true;
-  }
-
-  void addParticipant(){
-    if(totalParticipants > currentParticipants){
-      currentParticipants++;
-    }
-  }
-
-  void removeParticipant(){
-    if(currentParticipants > 0){
-      currentParticipants--;
-    }
   }
 
   @override

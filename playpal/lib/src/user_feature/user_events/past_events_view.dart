@@ -11,30 +11,32 @@ class PastEventsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<PastEventsProvider>(context);
-    final List<Event> events = provider.events;
+    final List<EventObject> eventObjects = provider.events;
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Colors.black54, title: const Text('My Past Events')),
+          backgroundColor: const Color.fromARGB(255, 8, 98, 54),
+          foregroundColor: Colors.white,
+          title: const Text('My Past Events')),
       body: ListView.builder(
         // Providing a restorationId allows the ListView to restore the
         // scroll position when a user leaves and returns to the app after it
         // has been killed while running in the background.
         restorationId: 'My Past Events',
-        itemCount: events.length,
+        itemCount: eventObjects.length,
         itemBuilder: (BuildContext context, int index) {
-          final event = events[index];
+          final eventObject = eventObjects[index];
 
           return ListTile(
-              title: Text(event.name),
-              subtitle: Text(event.sport),
+              title: Text(eventObject.event!.name),
+              subtitle: Text(eventObject.event!.sport),
               leading: CircleAvatar(
                 // Display the Flutter Logo image asset.
-                foregroundImage: NetworkImage(event.thumbnail),
+                foregroundImage: NetworkImage(eventObject.event!.thumbnail),
               ),
               onTap: () {
                 Navigator.restorablePushNamed(
                     context, EventDetailsView.routeName,
-                    arguments: event.toMap());
+                    arguments: eventObject.event!.toMap());
               });
         },
       ),
