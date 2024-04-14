@@ -8,7 +8,7 @@ import 'package:firebase_database/firebase_database.dart';
 
 /// Displays a list of events.
 class EventListView extends StatefulWidget {
-  EventListView({Key? key});
+  EventListView({super.key});
 
   static const routeName = '/events';
   final DatabaseReference database = FirebaseDatabase.instance.ref();
@@ -18,14 +18,13 @@ class EventListView extends StatefulWidget {
 }
 
 class EventListViewState extends State<EventListView> {
-  late Future<List<Event>> eventsFuture;
   TextEditingController searchController = TextEditingController();
-  late List<Event> allEvents;
+  late List<EventObject> allEvents = [];
 
   @override
   void initState() {
     super.initState();
-    eventsFuture = loadJournalEntries();
+    loadEvents();
   }
 
   @override
@@ -43,7 +42,7 @@ class EventListViewState extends State<EventListView> {
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               controller: searchController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Search',
                 hintText: 'Search events...',
                 prefixIcon: Icon(Icons.search),
@@ -53,19 +52,7 @@ class EventListViewState extends State<EventListView> {
             ),
           ),
           Expanded(
-            child: FutureBuilder<List<Event>>(
-              future: eventsFuture,
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return const Center(child: Text('An error occurred!'));
-                } else if (snapshot.hasData) {
-                  allEvents = snapshot.data!;
-                  return buildEventList(searchController.text);
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
+            child: buildEventList(searchController.text)
           ),
         ],
       ),
@@ -85,35 +72,33 @@ class EventListViewState extends State<EventListView> {
   }
 
   Widget buildEventList(String searchText) {
-    final List<Event> filteredEvents = allEvents
-        .where((event) =>
-            event.sport.toLowerCase().contains(searchText.toLowerCase()))
+    final List<EventObject> filteredEvents = allEvents
+        .where((eventObject) => eventObject.event!.sport
+            .toLowerCase()
+            .contains(searchText.toLowerCase()))
         .toList();
 
     if (filteredEvents.isEmpty) {
-      return Center(child: Text('No events found.'));
+      return const Center(child: Text('No events found.'));
     }
 
-    return EventList(events: filteredEvents);
+    return EventList(eventObjects: filteredEvents);
   }
 
   void onSearchTextChanged(String searchText) {
     setState(() {});
   }
 
-  Future<List<Event>> loadJournalEntries() async {
+  Future<void> loadEvents() async {
     try {
-      final DatabaseEvent event = await widget.database.child('events').once();
-      List<Event> eventList = [];
+      widget.database.child('my_events').onChildAdded.listen((data) {
+        Event eventData = Event.fromJson(data.snapshot.value! as Map);
+        EventObject eventObject =
+            EventObject(key: data.snapshot.key, event: eventData);
 
-      if (event.snapshot.value != null) {
-        final jsonData = Map<String, dynamic>.from(event.snapshot.value as Map);
-        jsonData.forEach((key, value) {
-          eventList.add(Event.fromJson(value));
-        });
-      }
-
-      return eventList;
+        allEvents.add(eventObject);
+        setState(() {});
+      });
     } catch (error) {
       rethrow;
     }
@@ -122,20 +107,20 @@ class EventListViewState extends State<EventListView> {
 
 /// Widget to display a list of events.
 class EventList extends StatelessWidget {
-  const EventList({Key? key, required this.events});
+  const EventList({super.key, required this.eventObjects});
 
-  final List<Event> events;
+  final List<EventObject> eventObjects;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       restorationId: 'EventListView',
-      itemCount: events.length,
+      itemCount: eventObjects.length,
       itemBuilder: (context, index) {
-        final event = events[index];
+        final event = eventObjects[index];
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
-          child: EventListItem(event: event),
+          child: EventListItem(eventObject: event),
         );
       },
     );
@@ -143,9 +128,9 @@ class EventList extends StatelessWidget {
 }
 
 class EventListItem extends StatelessWidget {
-  const EventListItem({Key? key, required this.event});
+  const EventListItem({super.key, required this.eventObject});
 
-  final Event event;
+  final EventObject eventObject;
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +139,7 @@ class EventListItem extends StatelessWidget {
         Navigator.restorablePushNamed(
           context,
           EventDetailsView.routeName,
-          arguments: event.toMap(),
+          arguments: eventObject.toMap(),
         );
       },
       child: Card(
@@ -165,8 +150,10 @@ class EventListItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: CircleAvatar(
-                backgroundImage: NetworkImage(event.thumbnail),
-              ),
+                  child: Hero(
+                tag: 'sportImage',
+                child: Image.network(eventObject.event!.thumbnail),
+              )),
             ),
             Expanded(
               child: Padding(
@@ -175,14 +162,14 @@ class EventListItem extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      event.name,
+                      eventObject.event!.name,
                       style: const TextStyle(
                         fontSize: 16.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      event.sport,
+                      eventObject.event!.sport,
                       style: const TextStyle(
                         fontSize: 14.0,
                         fontWeight: FontWeight.w600,
@@ -191,15 +178,15 @@ class EventListItem extends StatelessWidget {
                     ),
                     const SizedBox(height: 8.0),
                     Text(
-                      'Location: ${event.location}',
+                      'Location: ${eventObject.event!.location}',
                       style: const TextStyle(fontSize: 14.0),
                     ),
                     Text(
-                      'Date: ${event.date}, ${event.time}',
+                      'Date: ${eventObject.event!.date}, ${eventObject.event!.time}',
                       style: const TextStyle(fontSize: 14.0),
                     ),
                     Text(
-                      'Participants: ${event.currentParticipants}/${event.totalParticipants}',
+                      'Participants: ${eventObject.event!.currentParticipants}/${eventObject.event!.totalParticipants}',
                       style: const TextStyle(fontSize: 14.0),
                     ),
                   ],

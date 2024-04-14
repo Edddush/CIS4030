@@ -2,24 +2,24 @@ import 'package:flutter/widgets.dart';
 import 'package:playpal/src/event_feature/event.dart';
 
 class MyEventsProvider extends ChangeNotifier {
-  final List<Event> _events = [];
-  List<Event> get events => _events;
+  final List<EventObject> _eventObjects = [];
+  List<EventObject> get eventObjects => _eventObjects;
 
-  Future<void> addToList(Event event) async {
-    if (_isMyEvent(event) == false) {
-      _events.add(event);
+  Future<void> addToList(EventObject eventObject) async {
+    if (_isMyEvent(eventObject) == false) {
+      _eventObjects.add(eventObject);
       notifyListeners();
     }
   }
 
-  Future<void> removeFromList(Event event) async{
-    if (_isMyEvent(event)) {
-      _events.remove(event);
+  Future<void> removeFromList(EventObject eventObject) async{
+    if (_isMyEvent(eventObject)) {
+      _eventObjects.remove(eventObject);
       notifyListeners();
     }
   }
 
-  bool _isMyEvent(Event event) {
-    return _events.contains(event);
+  bool _isMyEvent(EventObject eventObject) {
+    return _eventObjects.contains(eventObject);
   }
 }

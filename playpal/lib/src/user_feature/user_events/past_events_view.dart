@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:playpal/providers/past_events_provider.dart';
 import 'package:playpal/src/event_feature/event.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:playpal/src/event_feature/event_details_view.dart';
-import 'package:provider/provider.dart';
 
-class PastEventsView extends StatelessWidget {
-  const PastEventsView({super.key});
+class PastEventsView extends StatefulWidget {
+  PastEventsView({super.key});
   static const routeName = '/past_events';
+  final DatabaseReference database = FirebaseDatabase.instance.ref();
+
+  @override
+  State<PastEventsView> createState() => _PastEventsViewState();
+}
+
+class _PastEventsViewState extends State<PastEventsView> {
+  late List<EventObject> pastEvents = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadEvents();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<PastEventsProvider>(context);
-    final List<EventObject> eventObjects = provider.events;
     return Scaffold(
       appBar: AppBar(
           backgroundColor: const Color.fromARGB(255, 8, 98, 54),
@@ -22,9 +33,9 @@ class PastEventsView extends StatelessWidget {
         // scroll position when a user leaves and returns to the app after it
         // has been killed while running in the background.
         restorationId: 'My Past Events',
-        itemCount: eventObjects.length,
+        itemCount: pastEvents.length,
         itemBuilder: (BuildContext context, int index) {
-          final eventObject = eventObjects[index];
+          final eventObject = pastEvents[index];
 
           return ListTile(
               title: Text(eventObject.event!.name),
@@ -41,5 +52,19 @@ class PastEventsView extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Future<void> loadEvents() async {
+    try {
+      widget.database.child('past_events').onChildAdded.listen((data) {
+        Event eventData = Event.fromJson(data.snapshot.value! as Map);
+        EventObject eventObject =
+            EventObject(key: data.snapshot.key!, event: eventData);
+        pastEvents.add(eventObject);
+        setState(() {});
+      });
+    } catch (error) {
+      rethrow;
+    }
   }
 }

@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 import 'package:playpal/src/user_feature/user_events/my_events_view.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 import '../event_feature/event.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:playpal/providers/my_events_provider.dart';
+// import 'package:playpal/providers/my_events_provider.dart';
 import 'package:flutter_datetime_picker_plus/flutter_datetime_picker_plus.dart'
     as datatTimePicker;
 
@@ -55,7 +55,7 @@ class CreateEventState extends State<CreateEvent> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<MyEventsProvider>(context);
+    // final provider = Provider.of<MyEventsProvider>(context);
     Future<void> appendToJson(Event event) async {
       try {
         await _database
@@ -63,7 +63,7 @@ class CreateEventState extends State<CreateEvent> {
             .push()
             .set(event.toMap())
             .then((value) {
-          provider.addToList(event);
+          // provider.addToList(event);
         });
       } catch (error) {
         rethrow;
@@ -279,6 +279,8 @@ class CreateEventState extends State<CreateEvent> {
                             thumbnail: thumbnail,
                             description: descriptionArray,
                             isPast: false,
+                            isUpcoming: false,
+                            isMine: true
                           );
                           appendToJson(newEvent);
                           Navigator.pushNamed(context, MyEventsView.routeName);

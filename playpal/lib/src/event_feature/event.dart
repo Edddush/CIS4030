@@ -1,25 +1,36 @@
 import 'package:flutter/material.dart';
 
-class EventObject{
+class EventObject {
   String? key;
   Event? event;
 
-  EventObject({this.key, this.event});
+  EventObject({required this.key, required this.event});
+
+  factory EventObject.fromJson(Map<dynamic, dynamic> json) {
+    return EventObject(
+        key: json['key'] as String,
+        event: Event.fromJson(json['event'] as Map));
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'key': key!,
+      'event': event!.toMap(),
+    };
+  }
 
   @override
-  bool operator == (Object other) {
+  bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is EventObject &&
-        other.key == key &&
-        other.event == event;
+    return other is EventObject && other.key == key && other.event == event;
   }
 
   @override
   int get hashCode => Object.hash(key, event);
-} 
+}
 
-class Event extends ChangeNotifier{
+class Event extends ChangeNotifier {
   Event(
       {required this.name,
       required this.sport,
@@ -30,7 +41,9 @@ class Event extends ChangeNotifier{
       required this.currentParticipants,
       required this.thumbnail,
       required this.description,
-      required this.isPast});
+      required this.isPast,
+      required this.isUpcoming,
+      required this.isMine});
 
   final String name;
   final String sport;
@@ -42,6 +55,8 @@ class Event extends ChangeNotifier{
   final String thumbnail;
   final List description;
   bool isPast;
+  bool isUpcoming;
+  bool isMine;
 
   factory Event.fromJson(Map<dynamic, dynamic> json) {
     return Event(
@@ -54,7 +69,9 @@ class Event extends ChangeNotifier{
         currentParticipants: json['current_participants'] as int,
         thumbnail: json['thumbnail'] as String,
         description: json['description'] as List,
-        isPast: json['is_past'] as bool);
+        isPast: json['is_past'] as bool,
+        isUpcoming: json['is_upcoming'] as bool,
+        isMine: json['is_mine'] as bool);
   }
 
   Map<String, dynamic> toMap() {
@@ -68,7 +85,9 @@ class Event extends ChangeNotifier{
       'current_participants': currentParticipants,
       'thumbnail': thumbnail,
       'description': description,
-      'is_past': isPast
+      'is_past': isPast,
+      'is_upcoming': isPast,
+      'is_mine': isPast
     };
   }
 

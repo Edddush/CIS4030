@@ -23,7 +23,7 @@ class _UserSettingsState extends State<UserSettings> {
   TextEditingController currentPasswordController = TextEditingController();
   TextEditingController newPasswordController = TextEditingController();
   TextEditingController locationController = TextEditingController();
-  DateTime? dob;
+  DateTime? dob = DateTime.now();
 
   void showDatePicker(BuildContext context) {
     date_time_picker.DatePicker.showDatePicker(
@@ -51,8 +51,8 @@ class _UserSettingsState extends State<UserSettings> {
   jsonData['date_of_birth'] = dob.toString();
   jsonData['location'] = locationController.text;
   String updatedJsonString = const JsonEncoder.withIndent('  ').convert(jsonData);
-  File file = File('/Users/arthurkowara/Documents/GitHub/CIS4030/playpal/assets/user.json');
-  // File file = File('/Users/eddydushime/Documents/Art/Uni/CIS4030/Milestone/M2/CIS4030/playpal/assets/event_list.json');
+  // File file = File('/Users/arthurkowara/Documents/GitHub/CIS4030/playpal/assets/user.json');
+  File file = File('/Users/eddydushime/Documents/Art/Uni/CIS4030/Milestone/M2/CIS4030/playpal/assets/user.json');
   await file.writeAsString(updatedJsonString);
 }
 

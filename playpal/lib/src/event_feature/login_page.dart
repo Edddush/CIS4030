@@ -49,14 +49,14 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            const Text(
               'Login',
               style: TextStyle(
                 fontSize: 24.0,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             TextField(
               controller: _usernameController,
               decoration: InputDecoration(
@@ -80,7 +80,6 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: _login,
-              child: const Text('Login'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.cyan[900],
                 foregroundColor: Colors.white,
@@ -89,6 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               ),
+              child: const Text('Login'),
             ),
             TextButton(
               onPressed: () {

@@ -43,13 +43,14 @@ class _EventDetailsViewState extends State<EventDetailsView> {
 
   @override
   Widget build(BuildContext context) {
-    final EventObject argument =
-        ModalRoute.of(context)!.settings.arguments as EventObject;
-
-    final Event event = Event.fromJson(argument.event!.toMap());
+    final RouteSettings route =  ModalRoute.of(context)!.settings;
+    final Map object = route.arguments as Map;
+    print(route.name);
+    final EventObject argument = EventObject.fromJson(object);
 
     final provider = Provider.of<UpcomingEventsProvider>(context);
-    Future<void> appendToJson(EventObject? eventObject) async {
+
+    Future<void> addToJson(EventObject? eventObject) async {
       try {
         await _database
             .child('upcoming_events')
@@ -57,8 +58,15 @@ class _EventDetailsViewState extends State<EventDetailsView> {
             .set(eventObject!.event!.toMap())
             .then((value) {
           provider.addToList(eventObject);
-          setState(() {});
         });
+
+        await _database
+            .child('events')
+            .child(eventObject.key!)
+            .remove()
+            .then((value) {});
+
+        setState(() {});
       } catch (error) {
         rethrow;
       }
@@ -72,8 +80,15 @@ class _EventDetailsViewState extends State<EventDetailsView> {
             .remove()
             .then((value) {
           provider.removeFromList(eventObject);
-          setState(() {});
         });
+
+        await _database
+            .child('events')
+            .push()
+            .set(eventObject.event!.toMap())
+            .then((value) {});
+
+        setState(() {});
       } catch (error) {
         rethrow;
       }
@@ -88,7 +103,7 @@ class _EventDetailsViewState extends State<EventDetailsView> {
           .child("events")
           .child(key)
           .update({"current_participants": value}).then((value) {
-        appendToJson(eventObject);
+        addToJson(eventObject);
       });
     }
 
@@ -106,37 +121,38 @@ class _EventDetailsViewState extends State<EventDetailsView> {
     }
 
     final String participantCount =
-        '${event.currentParticipants}/${event.totalParticipants}';
+        '${argument.event!.currentParticipants}/${argument.event!.totalParticipants}';
 
-    GoogleMapController mapController;
+    // GoogleMapController mapController;
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Event Details'),
-        backgroundColor: const Color.fromARGB(255, 8, 98, 54),
-        foregroundColor: Colors.white
-      ),
+          title: const Text('Event Details'),
+          backgroundColor: const Color.fromARGB(255, 8, 98, 54),
+          foregroundColor: Colors.white),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Event Image
-            Hero(tag: 'sportImage', child: Image.network(event.thumbnail)),
+            Hero(
+                tag: 'sportImage',
+                child: Image.network(argument.event!.thumbnail)),
             const SizedBox(height: 16),
             // Event Name
             Text(
-              event.name,
+              argument.event!.name,
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
             ),
             const Divider(),
             // Event Details
-            _buildEventDetailRow(context, 'Sport', event.sport),
-            _buildEventDetailRow(context, 'Location', event.location),
-            _buildEventDetailRow(context, 'Date', event.date),
-            _buildEventDetailRow(context, 'Time', event.time),
+            _buildEventDetailRow(context, 'Sport', argument.event!.sport),
+            _buildEventDetailRow(context, 'Location', argument.event!.location),
+            _buildEventDetailRow(context, 'Date', argument.event!.date),
+            _buildEventDetailRow(context, 'Time', argument.event!.time),
             _buildEventDetailRow(context, 'Participants', participantCount),
             const Divider(),
             const Text(
@@ -144,74 +160,91 @@ class _EventDetailsViewState extends State<EventDetailsView> {
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4),
-            ...event.description.map((desc) => Text(desc)),
+            ...argument.event!.description.map((desc) => Text(desc)),
             const SizedBox(height: 16),
 
             Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: provider.isUpcomingEvent(argument)
-                  ? ElevatedButton(
-                      onPressed: () {
-                        leaveParticipationUpdate(eventObject: argument);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
-                        padding: const EdgeInsets.all(16),
-                      ),
-                      child: const Text(
-                        'Leave Event',
-                        style: TextStyle(fontSize: 18, color: Colors.white),
-                      ),
-                    )
-                  : ElevatedButton(
-                      onPressed: () {
-                        joinParticipationUpdate(eventObject: argument);
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        padding: const EdgeInsets.all(16),
-                      ),
-                      child: const Text(
-                        'Join Event',
-                        style: TextStyle(fontSize: 18, color: Colors.white),
-                      ),
-                    ),
-            ),
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: argument.event!.isMine
+                    ? (ElevatedButton(
+                        onPressed: () {
+                          // cancelEvent(eventObject: argument);
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          padding: const EdgeInsets.all(16),
+                        ),
+                        child: const Text(
+                          'Cancel Event',
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        ),
+                      ))
+                    : (argument.event!.isUpcoming
+                        ? ElevatedButton(
+                            onPressed: () {
+                              leaveParticipationUpdate(eventObject: argument);
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.red,
+                              padding: const EdgeInsets.all(16),
+                            ),
+                            child: const Text(
+                              'Leave Event',
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.white),
+                            ),
+                          )
+                        : argument.event!.isPast
+                            ? null
+                            : ElevatedButton(
+                                onPressed: () {
+                                  joinParticipationUpdate(
+                                      eventObject: argument);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.green,
+                                  padding: const EdgeInsets.all(16),
+                                ),
+                                child: const Text(
+                                  'Join Event',
+                                  style: TextStyle(
+                                      fontSize: 18, color: Colors.white),
+                                ),
+                              ))),
             const SizedBox(height: 16),
             // Google Map
-
-            Container(
-              height: 300,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Colors.grey,
-                    spreadRadius: 1,
-                    blurRadius: 5,
-                  ),
-                ],
-              ),
-              child: GoogleMap(
-                key: const Key('AIzaSyBwbN0fky_wzAi59JEqcGX4uYldNNzCgNk'),
-                initialCameraPosition: const CameraPosition(
-                  target: LatLng(43.5507158, -80.2510604),
-                  zoom: 15,
-                ),
-                markers: {
-                  const Marker(
-                    markerId: MarkerId("event_location"),
-                    position: LatLng(43.5507158, -80.2510604),
-                  )
-                },
-                onMapCreated: (GoogleMapController controller) {
-                  mapController = controller;
-                },
-                mapType: MapType.normal,
-                onTap: (coord) => print('tapped $coord'),
-              ),
-            ),
+            // Container(
+            //   height: 300,
+            //   decoration: BoxDecoration(
+            //     borderRadius: BorderRadius.circular(10),
+            //     boxShadow: const [
+            //       BoxShadow(
+            //         color: Colors.grey,
+            //         spreadRadius: 1,
+            //         blurRadius: 5,
+            //       ),
+            //     ],
+            //   ),
+            //   child: GoogleMap(
+            //     key: const Key('AIzaSyBwbN0fky_wzAi59JEqcGX4uYldNNzCgNk'),
+            //     initialCameraPosition: const CameraPosition(
+            //       target: LatLng(43.5507158, -80.2510604),
+            //       zoom: 15,
+            //     ),
+            //     markers: {
+            //       const Marker(
+            //         markerId: MarkerId("event_location"),
+            //         position: LatLng(43.5507158, -80.2510604),
+            //       )
+            //     },
+            //     onMapCreated: (GoogleMapController controller) {
+            //       mapController = controller;
+            //     },
+            //     mapType: MapType.normal,
+            //     onTap: (coord) => print('tapped $coord'),
+            //   ),
+            // ),
           ],
         ),
       ),

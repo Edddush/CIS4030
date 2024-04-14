@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:playpal/providers/all_events.dart';
 import 'package:playpal/providers/my_events_provider.dart';
 import 'package:playpal/providers/past_events_provider.dart';
 import 'package:playpal/src/event_feature/event_details_view.dart';
@@ -37,6 +38,8 @@ class MyApp extends StatelessWidget {
               create: (context) => PastEventsProvider()),
           ChangeNotifierProvider<UpcomingEventsProvider>(
               create: (context) => UpcomingEventsProvider()),
+          ChangeNotifierProvider<AllEventsProvider>(
+              create: (context) => AllEventsProvider()),
         ],
         child: MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -83,15 +86,15 @@ class MyApp extends StatelessWidget {
                   case UserSettings.routeName:
                     return const UserSettings();
                   case MyEventsView.routeName:
-                    return const MyEventsView();
+                    return MyEventsView();
                   case UpcomingEventsView.routeName:
-                    return const UpcomingEventsView();
+                    return UpcomingEventsView();
                   case EventDetailsView.routeName:
                     return const EventDetailsView();
                   case CreateEvent.routeName:
                     return const CreateEvent();
                   case PastEventsView.routeName:
-                    return const PastEventsView();
+                    return PastEventsView();
                   case EventListView.routeName:
                   default:
                     return EventListView();
