@@ -28,6 +28,11 @@ class EventListViewState extends State<EventListView> {
   }
 
   @override
+  void dispose(){
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: const NavBar(),
